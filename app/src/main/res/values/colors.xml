@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+
+
+    <!-- 红色 -->
+    <color name="red">#e6262e</color>
+    <!-- 黑色 -->
+    <color name="black">#000000</color>
+    <!-- 灰色 -->
+    <color name="gray">#808080</color>
+    <!-- 灰色 -->
+    <color name="gray_base">#BFBFBF</color>
+    <!-- 蓝色 -->
+    <color name="blue_base">#3366CC</color>
+    <!-- 字体红 -->
+    <color name="text_red">#FB2F2F</color>
+    <!--  通知栏所需的颜色-->
+    <color name="base_action_bar_color">#E6262E</color>
+    <!-- 西红柿色 -->
+    <color name="tomato">#ff6347</color>
+    <color name="grey_171717">#171717</color>
+    <!-- 字体白 -->
+    <color name="text_white">#FFFFFF</color>
+    <color name="ColorBackgroundColor">#f8f8f8</color>
+    <color name="ColorTextColor">#808080</color>
+    <color name="CurrentTextColor">#69ade3</color>
+    <!--字体辅助颜色  -->
+    <color name="text_fuzhu">#828282</color>
+    <!--线条颜色  -->
+    <color name="line">#bebebe</color>
+    <!--正规字体颜色  -->
+    <color name="text_context">#212121</color>
+    <!-- 默认背景颜色 -->
+    <color name="background_color">#f3f3f3</color>
+    <color name="blue">#6699ff</color>
+    <!-- 土色 -->
+    <color name="tuse">#666633</color>
+</resources>

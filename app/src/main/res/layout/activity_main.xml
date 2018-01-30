@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+
+
+    <TextView
+        android:id="@+id/text"
+        android:text="Hello World!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="点击"
+        android:onClick="click"
+        />
+
+    <Button
+        android:id="@+id/btn_contorl_thread"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="使用rxjava控制线程"
+        />
+    <Button
+        android:id="@+id/btn_rxjava_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="使用rxjava进行登录"
+        />
+    <Button
+        android:id="@+id/btn_contorl_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="使用rxjava监听editext输入内容和按钮的重复点击事件"
+        />
+        <Button
+            android:id="@+id/btn_system_rxjava_study"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RxJava系列之操作符学习"
+            />
+    <Button
+        android:id="@+id/btn_okhttp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="使用okhttp3"
+        />
+    <Button
+        android:id="@+id/btn_retrofit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="使用retrofit"
+        />
+    <Button
+        android:id="@+id/btn_eventbus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="使用eventbus"
+        />
+    <Button
+        android:id="@+id/btn_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="实现自定义view"
+        />
+        <Button
+            android:id="@+id/btn_view_coordinate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="实现view 坐标系移动"
+            />
+    <Button
+        android:id="@+id/btn_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="gridview 多选"
+        />
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="loginActivity"
+        />
+    </LinearLayout>
+</ScrollView>

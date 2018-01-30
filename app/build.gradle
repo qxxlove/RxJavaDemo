@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.0"
+
+    defaultConfig {
+        applicationId "com.example.dell.rxjavademo"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+
+
+    /*RxJava*/
+    compile 'io.reactivex.rxjava2:rxjava:2.0.0-RC5'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.0-RC1'
+
+
+    /*retrofit和rxJava的结合*/
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+
+    /*retrofit所要的转换器，需要其他的，自行下载就好*/
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+
+    /*okhttp 所需的依赖    默认会导入一个okio （流）*/
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+
+    /*eventbus使用*/
+    compile 'org.greenrobot:eventbus:3.0.0'
+    /*butterknife*/
+
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+}

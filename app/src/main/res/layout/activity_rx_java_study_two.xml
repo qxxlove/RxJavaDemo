@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_rx_java_study_two"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_color"
+    tools:context="com.example.dell.rxjavademo.rxjava.RxJavaStudyTwoActivity">
+
+    <TextView
+        android:id="@+id/text_rxjava_create_one"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="RxJava操作符操作符实战"
+        android:gravity="center"
+        android:background="@color/text_white"
+        />
+
+
+</LinearLayout>

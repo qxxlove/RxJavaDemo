@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    >
+<!-- descendantFocusability   防止其他控件（ImageButton....）抢占焦点-->
+     <TextView
+         android:id="@+id/text_item_content"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/app_name"
+         android:layout_margin="10dp"
+         android:textSize="20sp"
+         android:layout_gravity="center"
+         />
+
+     <ImageButton
+         android:id="@+id/imageButton_delete"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:background="@mipmap/delete"
+         android:layout_gravity="center|right"
+         android:layout_marginLeft="100dp"
+         android:padding="20dp"
+         />
+</LinearLayout>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.dell.rxjavademo.view.CustomViewActivity">
+
+
+    <include  layout="@layout/layout_view_viewpager"/>
+    <Button
+        android:id="@+id/btn_popupwindow_drop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="跳转"
+        android:layout_centerInParent="true"
+        />
+
+
+
+
+
+
+      <RelativeLayout
+          android:id="@+id/relative_one"
+          android:layout_width="70dp"
+          android:layout_height="35dp"
+          android:background="@mipmap/level1"
+          android:layout_alignParentBottom="true"
+          android:layout_centerHorizontal="true"
+          >
+           <ImageView
+               android:id="@+id/image_home"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@mipmap/icon_home"
+               android:layout_centerInParent="true"
+               android:clickable="true"
+                android:layout_margin="10dp"
+               />
+
+      </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/relative_two"
+        android:layout_width="140dp"
+        android:layout_height="70dp"
+        android:background="@mipmap/level2"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        >
+        <ImageView
+            android:id="@+id/image_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_menu"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:clickable="true"
+            android:layout_margin="10dp"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_myyouku"
+            android:layout_alignParentBottom="true"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icon_search"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/relative_three"
+        android:layout_width="220dp"
+        android:layout_height="110dp"
+        android:background="@mipmap/level3"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/channel1"
+            android:layout_alignParentBottom="true"
+
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/channel2"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="20dp"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/channel3"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="40dp"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/channel4"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/channel7"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/channel5"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/channel6"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="40dp"
+            android:layout_alignParentRight="true"
+            />
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
