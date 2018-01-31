@@ -14,8 +14,10 @@ import com.example.dell.rxjavademo.R;
 import com.example.dell.rxjavademo.bean.TanslationEntity;
 import com.example.dell.rxjavademo.retrofit.Api.ExampleAPI;
 import com.example.dell.rxjavademo.utils.BaseUtils;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -37,22 +39,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * description: 针对创建操作符，进行实战
  * autour: TMM
- * date: 2018/1/22 15:17 
+ * date: 2018/1/22 15:17
  * update: 2018/1/22
  * version:
- *  实现：通过轮询请求金山词霸API ,获取返回值
- *
- *
-*/
+ * 实现：通过轮询请求金山词霸API ,获取返回值
+ */
 
 public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
-
 
 
     private static final String TAG = "Rxjava";
 
     // 设置变量 = 模拟轮询服务器次数
-    private int i = 0 ;
+    private int i = 0;
 
 
     private TextView text_one_request;
@@ -65,7 +64,22 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
     private EditText editText_age;
     private EditText editText_interesting;
     private Button btn_commit;
+    private TextView text_seven_request;
 
+    // 设置变量
+    // 可重试次数
+    private int maxConnectCount = 10;
+    // 当前已重试次数
+    private int currentRetryCount = 0;
+    // 重试等待时间
+    private int waitRetryTime = 0;
+    private TextView text_eight_request;
+    private EditText edit_input_search_content;
+    private TextView text_search_result;
+
+    boolean isUserNameValid;
+    boolean isUserAgeValid ;
+    boolean isUserJobValid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +97,15 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
         text_four_request = ((TextView) findViewById(R.id.text_rxjava_map_three));
         text_five_request = ((TextView) findViewById(R.id.text_rxjava_map_four));
         text_six_request = ((TextView) findViewById(R.id.text_rxjava_map_five));
+        text_seven_request = ((TextView) findViewById(R.id.text_rxjava_map_six));
+        text_eight_request = ((TextView) findViewById(R.id.text_rxjava_map_seven));
+        edit_input_search_content = ((EditText) findViewById(R.id.edit_input_search_content));
+        text_search_result = ((TextView) findViewById(R.id.text_show_search_result));
 
-        editText_name = ((EditText) findViewById( R.id.edit_input_name));
-        editText_age = ((EditText) findViewById( R.id.edit_input_age));
-        editText_interesting = ((EditText) findViewById( R.id.edit_input_interesting));
+
+        editText_name = ((EditText) findViewById(R.id.edit_input_name));
+        editText_age = ((EditText) findViewById(R.id.edit_input_age));
+        editText_interesting = ((EditText) findViewById(R.id.edit_input_interesting));
         btn_commit = ((Button) findViewById(R.id.btn_commit));
 
     }
@@ -143,10 +162,192 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
         btn_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initConbineLatest();
+                    BaseUtils.toast("点击了");
+                    initConbineLatest();
+
+
             }
         });
 
+        // ④ 使用功能操作符解决错误重连机制
+        text_seven_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initRetryWhen();
+            }
+        });
+
+        // ⑤ 使用过滤操作符解决按钮重复点击
+        initThrottleFirst();
+
+        // ⑥ 使用过滤操作符解决开发常见的 搜索功能优化
+        initDebounce();
+
+    }
+
+
+    /**
+     * 使用debounce == throttleWithTimeout
+     * <p>
+     * <p>
+     * 说明
+     * 1. 此处采用了RxBinding：RxTextView.textChanges(name) = 对对控件数据变更进行监听（功能类似TextWatcher），
+     * 需要引入依赖：compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+     * 2. 传入EditText控件，输入字符时都会发送数据事件（此处不会马上发送，因为使用了debounce（））
+     * 3. 采用skip(1)原因：跳过 第1次请求 = 初始输入框的空字符状态
+     */
+
+    private void initDebounce() {
+        RxTextView.textChanges(edit_input_search_content)
+                .debounce(2, TimeUnit.SECONDS)
+                .skip(1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<CharSequence>() {
+                    @Override
+                    public void accept(CharSequence charSequence) throws Exception {
+                        text_search_result.setText("发送给服务器的字符 = " + charSequence.toString());
+                    }
+                });
+
+
+    }
+
+    /**
+     * 使用ThrottleFirst 解决按钮重复点击事件
+     */
+    private void initThrottleFirst() {
+        /*
+         * 1. 此处采用了RxBinding：RxView.clicks(button) = 对控件点击进行监听，需要引入依赖：compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+         * 2. 传入Button控件，点击时，都会发送数据事件（但由于使用了throttleFirst（）操作符，所以只会发送该段时间内的第1次点击事件）
+         **/
+        RxView.clicks(text_eight_request)
+                .throttleFirst(2, TimeUnit.SECONDS)   // 才发送 2s内第1次点击按钮的事件
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Object value) {
+                        Log.d(TAG, "发送了网络请求");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    /**
+     * 当发送错误的我们可以做一些处理
+     * 如下: 模拟 采用Get方法对 金山词霸API 发送网络请求
+     * 通过 断开网络连接 模拟 网络异常错误（恢复网络即可成功发送请求），
+     * 限制重试次数 = 10次 ，
+     * 采用 Gson 进行数据解析 。
+     */
+    private void initRetryWhen() {
+        // a. 创建Retrofit 对象
+        ExampleAPI exampleAPI = initRetrofit();
+        //b.  采用Observable<...>  的形式 对网络请求进行封装
+        Observable<TanslationEntity> tranlationResult =
+                exampleAPI.getTranlationResult();
+
+        // c：发送网络请求 & 通过retryWhen（）进行重试
+        // 注：主要异常才会回调retryWhen（）进行重试
+        tranlationResult.retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
+            @Override
+            public ObservableSource<?> apply(@NonNull Observable<Throwable> throwableObservable) throws Exception {
+                // 参数Observable<Throwable>中的泛型 = 上游操作符抛出的异常，可通过该条件来判断异常的类型
+                return throwableObservable.flatMap(new Function<Throwable, ObservableSource<?>>() {
+                    @Override
+                    public ObservableSource<?> apply(@NonNull Throwable throwable) throws Exception {
+
+                        // 输出异常信息
+                        Log.d(TAG, "发生异常 = " + throwable.toString());
+
+                        /**
+                         * 需求1：根据异常类型选择是否重试
+                         * 即，当发生的异常 = 网络异常 = IO异常 才选择重试
+                         */
+                        if (throwable instanceof IOException) {
+
+                            Log.d(TAG, "属于IO异常，需重试");
+
+                            /**
+                             * 需求2：限制重试次数
+                             * 即，当已重试次数 < 设置的重试次数，才选择重试
+                             */
+                            if (currentRetryCount < maxConnectCount) {
+
+                                // 记录重试次数
+                                currentRetryCount++;
+                                Log.d(TAG, "重试次数 = " + currentRetryCount);
+
+                                /**
+                                 * 需求2：实现重试
+                                 * 通过返回的Observable发送的事件 = Next事件，从而使得retryWhen（）重订阅，最终实现重试功能
+                                 *
+                                 * 需求3：延迟1段时间再重试
+                                 * 采用delay操作符 = 延迟一段时间发送，以实现重试间隔设置
+                                 *
+                                 * 需求4：遇到的异常越多，时间越长
+                                 * 在delay操作符的等待时间内设置 = 每重试1次，增多延迟重试时间1s
+                                 */
+                                // 设置等待时间
+                                waitRetryTime = 1000 + currentRetryCount * 1000;
+                                Log.d(TAG, "等待时间 =" + waitRetryTime);
+                                return Observable.just(1).delay(waitRetryTime, TimeUnit.MILLISECONDS);
+
+
+                            } else {
+                                // 若重试次数已 > 设置重试次数，则不重试
+                                // 通过发送error来停止重试（可在观察者的onError（）中获取信息）
+                                return Observable.error(new Throwable("重试次数已超过设置次数 = " + currentRetryCount + "，即 不再重试"));
+
+                            }
+                        }
+
+                        // 若发生的异常不属于I/O异常，则不重试
+                        // 通过返回的Observable发送的事件 = Error事件 实现（可在观察者的onError（）中获取信息）
+                        else {
+                            return Observable.error(new Throwable("发生了非网络异常（非I/O异常）"));
+                        }
+                    }
+                });
+            }
+        }).subscribeOn(Schedulers.io())               // 切换到IO线程进行网络请求
+                .observeOn(AndroidSchedulers.mainThread())  // 切换回到主线程 处理请求结果
+                .subscribe(new Observer<TanslationEntity>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(TanslationEntity result) {
+                        // 接收服务器返回的数据
+                        Log.d(TAG, "发送成功" + result.getContent().getOut());
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // 获取停止重试的信息
+                        Log.d(TAG, e.toString());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
     }
 
@@ -169,7 +370,7 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
         /*
          * 步骤2：通过combineLatest（）合并事件 & 联合判断
          **/
-        Observable.combineLatest(nameObservable,ageObservable,jobObservable,new Function3<CharSequence, CharSequence, CharSequence,Boolean>() {
+        Observable.combineLatest(nameObservable, ageObservable, jobObservable, new Function3<CharSequence, CharSequence, CharSequence, Boolean>() {
             @Override
             public Boolean apply(@NonNull CharSequence charSequence, @NonNull CharSequence charSequence2, @NonNull CharSequence charSequence3) throws Exception {
 
@@ -177,15 +378,15 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
                  * 步骤4：规定表单信息输入不能为空
                  **/
                 // 1. 姓名信息
-                boolean isUserNameValid = !TextUtils.isEmpty(editText_name.getText()) ;
+                isUserNameValid = !TextUtils.isEmpty(editText_name.getText());
                 // 除了设置为空，也可设置长度限制
                 // boolean isUserNameValid = !TextUtils.isEmpty(name.getText()) && (name.getText().toString().length() > 2 && name.getText().toString().length() < 9);
 
                 // 2. 年龄信息
-                boolean isUserAgeValid = !TextUtils.isEmpty(editText_age.getText());
-                // 3. 职业信息
-                boolean isUserJobValid = !TextUtils.isEmpty(editText_interesting.getText()) ;
+                 isUserAgeValid = !TextUtils.isEmpty(editText_age.getText());
 
+                // 3. 职业信息
+                 isUserJobValid = !TextUtils.isEmpty(editText_interesting.getText());
                 /*
                  * 步骤5：返回信息 = 联合判断，即3个信息同时已填写，"提交按钮"才可点击
                  **/
@@ -198,16 +399,20 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
                 /*
                  * 步骤6：返回结果 & 设置按钮可点击样式
                  **/
-                Log.e(TAG, "提交按钮是否可点击： "+s);
-                if (s == true){
+                Log.e(TAG, "提交按钮是否可点击： " + s);
+                if (s == true) {
                     BaseUtils.toast("可以提交");
-                }else{
+                } else {
                     BaseUtils.toast("不可以提交");
                 }
 
             }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.e(TAG, "发生错误： " + throwable.getMessage());
+            }
         });
-
 
 
     }
@@ -219,7 +424,7 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
      */
     private void initZip() {
         // a. 创建Retrofit 对象
-        ExampleAPI exampleAPI =  initRetrofit();
+        ExampleAPI exampleAPI = initRetrofit();
         //b.  采用Observable<...>  的形式 对网络请求进行封装
         final Observable<TanslationEntity> tranlationResult =
                 exampleAPI.getTranlationResult().subscribeOn(Schedulers.io());
@@ -227,24 +432,24 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
                 exampleAPI.getTranlationResultTwo().subscribeOn(Schedulers.io());
         // 即2个网络请求异步 & 同时发送
         // c：通过使用Zip（）对两个网络请求进行合并再发送
-         Observable.zip(tranlationResult, tranlationResultTwo, new BiFunction<TanslationEntity, TanslationEntity, String>() {
-             @Override
-             public String apply(TanslationEntity tanslationEntity, TanslationEntity tanslationEntity2) throws Exception {
-                 return "第一次翻译："+tanslationEntity.getContent().getOut()+" & "+"第二次翻译"+tanslationEntity2.getContent().getOut();
-             }
-         }).observeOn(AndroidSchedulers.mainThread())
-                 .subscribe(new Consumer<String>() {
-                     @Override
-                     public void accept(String s) throws Exception {
-                         // 结合显示2个网络请求的数据结果
-                         Log.d(TAG, "最终接收到的数据是：" + s);
-                     }
-                 }, new Consumer<Throwable>() {
-                     @Override
-                     public void accept(Throwable throwable) throws Exception {
-                         Log.d(TAG, "发生错误");
-                     }
-                 });
+        Observable.zip(tranlationResult, tranlationResultTwo, new BiFunction<TanslationEntity, TanslationEntity, String>() {
+            @Override
+            public String apply(TanslationEntity tanslationEntity, TanslationEntity tanslationEntity2) throws Exception {
+                return "第一次翻译：" + tanslationEntity.getContent().getOut() + " & " + "第二次翻译" + tanslationEntity2.getContent().getOut();
+            }
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        // 结合显示2个网络请求的数据结果
+                        Log.d(TAG, "最终接收到的数据是：" + s);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.d(TAG, "发生错误");
+                    }
+                });
 
     }
 
@@ -252,7 +457,8 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
     /**
      * 从网络和本地合并数据源
      */
-    String result = "数据源来自 = " ;
+    String result = "数据源来自 = ";
+
     private void initMerge() {
 
           /*
@@ -266,7 +472,7 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
          **/
         Observable<String> location = Observable.just("本地");
 
-        Observable.merge(internet,location).subscribe(new Observer<String>() {
+        Observable.merge(internet, location).subscribe(new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -274,7 +480,7 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
 
             @Override
             public void onNext(String value) {
-                Log.d(TAG, "数据源有： "+ value  );
+                Log.d(TAG, "数据源有： " + value);
                 result += value + "+";
             }
 
@@ -287,7 +493,7 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
             @Override
             public void onComplete() {
                 Log.d(TAG, "获取数据完成");
-                Log.d(TAG,  result  );
+                Log.d(TAG, result);
             }
         });
 
@@ -306,20 +512,20 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
         Observable<String> memory = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> e) throws Exception {
-                   if (memoryCache != null){
-                       e.onNext(memoryCache);
-                   }else {
-                       e.onComplete();
-                   }
+                if (memoryCache != null) {
+                    e.onNext(memoryCache);
+                } else {
+                    e.onComplete();
+                }
             }
         });
         // 检查磁盘缓存中是否有数据
         Observable<String> disk = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> e) throws Exception {
-                if (diskCache != null){
+                if (diskCache != null) {
                     e.onNext(diskCache);
-                }else {
+                } else {
                     e.onComplete();
                 }
             }
@@ -328,20 +534,20 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
         Observable<String> internet = Observable.just("从网路请求获取");
 
         //   1 将它们按顺序串联成队列
-        Observable.concat(memory,disk,internet)
+        Observable.concat(memory, disk, internet)
                 // 2. 通过firstElement()，从串联队列中取出并发送第1个有效事件（Next事件），即依次判断检查memory、disk、network
                 .firstElement()
-        // 即本例的逻辑为：
-        // a. firstElement()取出第1个事件 = memory，即先判断内存缓存中有无数据缓存；由于memoryCache = null，即内存缓存中无数据，所以发送结束事件（视为无效事件）
-        // b. firstElement()继续取出第2个事件 = disk，即判断磁盘缓存中有无数据缓存：由于diskCache ≠ null，即磁盘缓存中有数据，所以发送Next事件（有效事件）
-        // c. 即firstElement()已发出第1个有效事件（disk事件），所以停止判断。
+                // 即本例的逻辑为：
+                // a. firstElement()取出第1个事件 = memory，即先判断内存缓存中有无数据缓存；由于memoryCache = null，即内存缓存中无数据，所以发送结束事件（视为无效事件）
+                // b. firstElement()继续取出第2个事件 = disk，即判断磁盘缓存中有无数据缓存：由于diskCache ≠ null，即磁盘缓存中有数据，所以发送Next事件（有效事件）
+                // c. 即firstElement()已发出第1个有效事件（disk事件），所以停止判断。
 
                 .subscribe(new Consumer<String>() {
-            @Override
-            public void accept(String s) throws Exception {
-                Log.d(TAG,"最终获取的数据来源 =  "+ s);
-            }
-        });
+                    @Override
+                    public void accept(String s) throws Exception {
+                        Log.d(TAG, "最终获取的数据来源 =  " + s);
+                    }
+                });
 
     }
 
@@ -351,13 +557,13 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
      */
     private void initFlatMapRaJava() {
         // a. 创建Retrofit 对象
-        ExampleAPI exampleAPI =  initRetrofit();
+        ExampleAPI exampleAPI = initRetrofit();
         //b.  采用Observable<...>  的形式 对网络请求进行封装
         final Observable<TanslationEntity> tranlationResult =
                 exampleAPI.getTranlationResult();
         final Observable<TanslationEntity> tranlationResultTwo =
                 exampleAPI.getTranlationResultTwo();
-         // c.通过线程切换实现网络请求
+        // c.通过线程切换实现网络请求
         tranlationResult.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Consumer<TanslationEntity>() {
@@ -368,18 +574,18 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
                         // 对第1次网络请求返回的结果进行操作 = 显示翻译结果
                     }
                 })
-        // （新被观察者，同时也是新观察者）切换到IO线程去发起登录请求
-        // 特别注意：因为flatMap是对初始被观察者作变换，所以对于旧被观察者，它是新观察者，所以通过observeOn切换线程
-        // 但对于初始观察者，它则是新的被观察者
+                // （新被观察者，同时也是新观察者）切换到IO线程去发起登录请求
+                // 特别注意：因为flatMap是对初始被观察者作变换，所以对于旧被观察者，它是新观察者，所以通过observeOn切换线程
+                // 但对于初始观察者，它则是新的被观察者
                 .observeOn(Schedulers.io())
-               // 作变换，即作嵌套网络请求
+                // 作变换，即作嵌套网络请求
                 .flatMap(new Function<TanslationEntity, ObservableSource<TanslationEntity>>() {
                     @Override
                     public ObservableSource<TanslationEntity> apply(TanslationEntity tanslationEntity) throws Exception {
                         // 注册失败处理
-                         if (tanslationEntity == null){
-                             return  null;
-                         }
+                        if (tanslationEntity == null) {
+                            return null;
+                        }
                         // 将网络请求1转换成网络请求2，即发送网络请求2
                         return tranlationResultTwo;
                     }
@@ -403,18 +609,17 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * 有条件轮询
      */
     private void initLimitRxJava() {
         // a. 创建Retrofit 对象
-        ExampleAPI exampleAPI =  initRetrofit();
+        ExampleAPI exampleAPI = initRetrofit();
         //b.  采用Observable<...>  的形式 对网络请求进行封装
         Observable<TanslationEntity> tranlationResult =
                 exampleAPI.getTranlationResult();
         // c：发送网络请求 & 通过repeatWhen（）进行轮询
-        Log.e(TAG, "i----------"+i);
+        Log.e(TAG, "i----------" + i);
         tranlationResult.repeatWhen(new Function<Observable<Object>, ObservableSource<?>>() {
             @Override
             // 在Function函数中，必须对输入的 Observable<Object>进行处理，此处使用flatMap操作符接收上游的数据
@@ -450,15 +655,15 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
                     @Override
                     public void onNext(TanslationEntity result) {
                         // e.接收服务器返回的数据
-                        Log.e(TAG, result.getContent().getOut() );
+                        Log.e(TAG, result.getContent().getOut());
                         i++;
-                        Log.e(TAG, "i======"+i);
+                        Log.e(TAG, "i======" + i);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         // 获取轮询结束信息
-                        Log.d(TAG,  e.toString());
+                        Log.d(TAG, e.toString());
                     }
 
                     @Override
@@ -471,7 +676,6 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * 无条件轮询
      */
@@ -480,49 +684,49 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
          * 步骤1：采用interval（）延迟发送
          * 注：此处主要展示无限次轮询，若要实现有限次轮询，仅需将interval（）改成intervalRange（）即可
          **/
-        Observable.interval(3,1, TimeUnit.SECONDS)
+        Observable.interval(3, 1, TimeUnit.SECONDS)
                 /*
                   * 步骤2：每次发送数字前发送1次网络请求（doOnNext（）在执行Next事件前调用）
                   * 即每隔1秒产生1个数字前，就发送1次网络请求，从而实现轮询需求
                   **/
                 .doOnNext(new Consumer<Long>() {
-            @Override
-            public void accept(Long aLong) throws Exception {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
                    /*
                   * 步骤3：通过Retrofit发送网络请求
                   **/
-                // a. 创建Retrofit 对象
-                ExampleAPI exampleAPI =  initRetrofit();
-                 //b.  采用Observable<...>  的形式 对网络请求进行封装
-                Observable<TanslationEntity> tranlationResult =
-                        exampleAPI.getTranlationResult();
-                // c.通过线程切换实现网络请求
-                tranlationResult.subscribeOn(Schedulers.io())   // （初始被观察者）切换到IO线程进行网络请求1
-                        .observeOn(AndroidSchedulers.mainThread())   // （新观察者）切换到主线程 处理网络请求1的结果
-                        .subscribe(new Observer<TanslationEntity>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
+                        // a. 创建Retrofit 对象
+                        ExampleAPI exampleAPI = initRetrofit();
+                        //b.  采用Observable<...>  的形式 对网络请求进行封装
+                        Observable<TanslationEntity> tranlationResult =
+                                exampleAPI.getTranlationResult();
+                        // c.通过线程切换实现网络请求
+                        tranlationResult.subscribeOn(Schedulers.io())   // （初始被观察者）切换到IO线程进行网络请求1
+                                .observeOn(AndroidSchedulers.mainThread())   // （新观察者）切换到主线程 处理网络请求1的结果
+                                .subscribe(new Observer<TanslationEntity>() {
+                                    @Override
+                                    public void onSubscribe(Disposable d) {
 
-                            }
+                                    }
 
-                            @Override
-                            public void onNext(TanslationEntity value) {
-                                Log.e("RxJava",value.getContent().getOut());
-                            }
+                                    @Override
+                                    public void onNext(TanslationEntity value) {
+                                        Log.e("RxJava", value.getContent().getOut());
+                                    }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                Log.e("RxJava1",e.getMessage());
-                            }
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        Log.e("RxJava1", e.getMessage());
+                                    }
 
-                            @Override
-                            public void onComplete() {
+                                    @Override
+                                    public void onComplete() {
 
-                            }
-                        });
+                                    }
+                                });
 
-            }
-        }).subscribe(new Observer<Long>() {
+                    }
+                }).subscribe(new Observer<Long>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -535,7 +739,7 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable e) {
-                Log.e("RxJava2",e.getMessage());
+                Log.e("RxJava2", e.getMessage());
             }
 
             @Override
@@ -546,9 +750,9 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * 初始化Retrofit
+     *
      * @return
      */
     private ExampleAPI initRetrofit() {
@@ -559,6 +763,6 @@ public class RaJavaStudyTwoExampleActivity extends AppCompatActivity {
                 .build();
         // 创建网络请求接口实例
         ExampleAPI exampleAPI = retrofit.create(ExampleAPI.class);
-        return  exampleAPI;
+        return exampleAPI;
     }
 }

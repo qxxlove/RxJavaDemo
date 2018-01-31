@@ -106,6 +106,40 @@
              android:background="@color/base_action_bar_color"
              />
      </LinearLayout>
-
+        <TextView
+            android:layout_marginTop="@dimen/activity_dimens_ten"
+            android:id="@+id/text_rxjava_map_six"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="RxJava操作符之功能操作符之错误重连接机制"
+            android:gravity="center"
+            android:background="@color/text_white"
+            />
+        <TextView
+            android:layout_marginTop="@dimen/activity_dimens_ten"
+            android:id="@+id/text_rxjava_map_seven"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="RxJava操作符之过滤操作符之功能防抖（重复点击）"
+            android:gravity="center"
+            android:background="@color/text_white"
+            />
+        <EditText
+            android:id="@+id/edit_input_search_content"
+            android:layout_marginTop="@dimen/activity_dimens_ten"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/text_white"
+            android:hint="请输入搜索内容"
+            android:gravity="center"
+            />
+        <TextView
+            android:id="@+id/text_show_search_result"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="搜索的内容（最后向服务器发送的数据）"
+            android:gravity="center"
+            android:background="@color/text_white"
+            />
     </LinearLayout>
 </ScrollView>

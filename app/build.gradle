@@ -51,4 +51,8 @@ dependencies {
     /*butterknife*/
 
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+
+    // RxBing
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+
 }

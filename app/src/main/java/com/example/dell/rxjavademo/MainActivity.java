@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.dell.rxjavademo.activity.AnimationActivity;
 import com.example.dell.rxjavademo.activity.GridviewActivity;
 import com.example.dell.rxjavademo.eventbus.EventBusActivity;
 import com.example.dell.rxjavademo.okhttp3.OkhttpActivity;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_login_actiivyt;
     private Button btn_system_rxjava_study;
     private Button btn_view_coordinate;
+    private Button btn_animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +141,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,ViewsCoordinateActivity.class));
             }
         });
+        btn_animation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,AnimationActivity.class));
+            }
+        });
     }
 
     private void initView() {
@@ -154,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
         btn_login_actiivyt = ((Button) findViewById(R.id.btn_login));
         btn_system_rxjava_study = ((Button) findViewById(R.id.btn_system_rxjava_study));
         btn_view_coordinate = ((Button) findViewById(R.id.btn_view_coordinate));
+        btn_animation = ((Button) findViewById(R.id.btn_animation));
     }
 
     public void click(View view) {

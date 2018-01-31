@@ -95,5 +95,11 @@
         android:layout_height="wrap_content"
         android:text="loginActivity"
         />
+        <Button
+            android:id="@+id/btn_animation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="animationActivity 动画"
+            />
     </LinearLayout>
 </ScrollView>
