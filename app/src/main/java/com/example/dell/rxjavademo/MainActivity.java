@@ -19,6 +19,7 @@ import com.example.dell.rxjavademo.rxjava.ControlThreadActivity;
 import com.example.dell.rxjavademo.rxjava.LoginUserActivity;
 import com.example.dell.rxjavademo.rxjava.RxJavaStudyTwoActivity;
 import com.example.dell.rxjavademo.rxjava.SearchRxJavaActivity;
+import com.example.dell.rxjavademo.service.ServiceUseActivity;
 import com.example.dell.rxjavademo.view.CustomViewActivity;
 import com.example.dell.rxjavademo.view.ViewsCoordinateActivity;
 
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_system_rxjava_study;
     private Button btn_view_coordinate;
     private Button btn_animation;
+    private Button btn_service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +149,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,AnimationActivity.class));
             }
         });
+        btn_service.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,ServiceUseActivity.class));
+            }
+        });
     }
 
     private void initView() {
@@ -163,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
         btn_system_rxjava_study = ((Button) findViewById(R.id.btn_system_rxjava_study));
         btn_view_coordinate = ((Button) findViewById(R.id.btn_view_coordinate));
         btn_animation = ((Button) findViewById(R.id.btn_animation));
+        btn_service = ((Button) findViewById(R.id.btn_service));
+
     }
 
     public void click(View view) {

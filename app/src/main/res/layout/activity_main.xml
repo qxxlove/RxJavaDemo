@@ -101,5 +101,11 @@
             android:layout_height="wrap_content"
             android:text="animationActivity 动画"
             />
+        <Button
+            android:id="@+id/btn_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="四大组件之service"
+            />
     </LinearLayout>
 </ScrollView>

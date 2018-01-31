@@ -56,6 +56,12 @@
 
         <activity android:name=".activity.AnimationActivity">
         </activity>
+        <activity android:name=".service.ServiceUseActivity">
+        </activity>
+
+        <service android:name=".service.MyService"></service>
+        <service android:name=".service.AidlService"></service>
+
     </application>
 
 </manifest>
