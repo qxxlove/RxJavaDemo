@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_text_commodity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.dell.rxjavademo.activity.TextCommodityActivity">
+
+    <TextView
+        android:id="@+id/text_click"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="推荐商品详情"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/text_click_two"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="获取当前Activity的个数"
+        android:gravity="center"
+        />
+
+</LinearLayout>

@@ -107,5 +107,17 @@
             android:layout_height="wrap_content"
             android:text="四大组件之service"
             />
+        <Button
+            android:id="@+id/btn_commondity_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="商品详情页跳转"
+            />
+        <Button
+            android:id="@+id/btn_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="text图文混排"
+            />
     </LinearLayout>
 </ScrollView>

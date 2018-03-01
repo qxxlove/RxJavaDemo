@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_text"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_color"
+    tools:context="com.example.dell.rxjavademo.activity.TextActivity">
+
+    <TextView
+        android:id="@+id/text_and_image_mixed"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="TextView 图文混排"
+        android:gravity="center"
+        android:background="@color/text_white"
+        />
+
+</LinearLayout>

@@ -59,9 +59,13 @@
         <activity android:name=".service.ServiceUseActivity">
         </activity>
 
-        <service android:name=".service.MyService"></service>
-        <service android:name=".service.AidlService"></service>
+        <service android:name=".service.MyService"/>
+        <service android:name=".service.AidlService"/>
 
+        <activity android:name=".activity.TextCommodityActivity">
+        </activity>
+        <activity android:name=".activity.TextActivity">
+        </activity>
     </application>
 
 </manifest>
