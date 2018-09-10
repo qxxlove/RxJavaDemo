@@ -36,4 +36,9 @@ public class MyService extends Service {
     public void receiveMessage(String c) {
         BaseUtils.toast("接收到来自Activity的消息："+c);
     }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return super.onUnbind(intent);
+    }
 }

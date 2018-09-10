@@ -36,7 +36,7 @@ public class MyBinder extends Binder {
      */
     public  void  testMethod(String c){
         myService.receiveMessage(c);
-       // testListener.reviewActivity("service回复activityde 的消息： hello Activity");
+        testListener.reviewActivity("service回复activityde 的消息： hello Activity");
     }
 
 

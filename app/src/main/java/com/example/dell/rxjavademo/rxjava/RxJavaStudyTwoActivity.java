@@ -10,11 +10,18 @@ import android.widget.TextView;
 
 import com.example.dell.rxjavademo.R;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Notification;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -38,6 +45,10 @@ import io.reactivex.schedulers.Schedulers;
  * date: 2018/1/22 11:26
  * update: 2018/1/22
  * version:
+ * 参考：这是一个RaJava系列
+ *      https://www.jianshu.com/p/ceb48ed8719d
+ *
+ *
  */
 
 public class RxJavaStudyTwoActivity extends AppCompatActivity {
@@ -47,6 +58,9 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
 
     private List<String> list = new ArrayList<>();
 
+    private Subscription mSubscription;
+    private TextView text_two;
+    private TextView textThree;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +71,7 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
 
         // 创建操作符的使用
         //①最基本的使用，不考虑任何封装，，实用等
-        // initRaJava();
+        initRaJava();
         //② 快速创建 被观察者 ， just(最多只能发送十个参数)（经验之谈，没试过）
         //  initJustRxJava();
         //③快速创建 被观察者，  fromArray(必须传一个数组，集合是不可以的)， 支持10个以上参数，因为数组无限大
@@ -123,7 +137,7 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         // ②  subscribeOn() 和 observeOn ()    功能操作符之 线程切换操作符
         // 通过 上述 subscribe 的例子，我们知道观察者和被观察者的发生都是在主线程中完成的，但是我们实际开发中，要比这复杂的很多
         // 我们也必须要遵从的原则"在主线程中更新UI,在子线程中执行耗时操作，所以就出现了subscribeOn 和 observeOn 操作符"
-        //initSubscribeOnAndOberveOn();
+        initSubscribeOnAndOberveOn();
         // ③ delay()                         功能操作符之 延迟操作符
         //initDelay();
         // ④ do 操作符                       功能操作符之 把控发送某个事件的生命周期
@@ -176,8 +190,513 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         //initElementAtErrorRaJava();
 
         // 条件/布尔操作符
+         // ① all    判断发送的数据是否都满足条件
+         // initAllRxjava();
+         // ② takeWhile  判断发送的数据是否都满足条件（同上区别： 满足才发送，不满足则不发送）
+        //  initTakeWithRxjava();
+         // ③ skipWhile  判断发送的数据是否都满足条件（同上区别： 发送的是不满足的数据）
+        //  initSkipWhileRxjava();
+          // ④ takeUntil  执行到满足当前条件，则停止发送数据
+        //  initTakeUntilRxJava();
+           // 该判断条件也可以是Observable
+         // initTakeUntilTwoRxJava();
+          // ⑤ skipUntil  执行到满足当前条件，则发送之后的数据
+        //   initSkipUntilRxJava();
+          // ⑥ sequenceEqual   比较两个Observable 发送的数据是否相等
+          // initSequenceEqualRxJava();
+          // ⑦ contains     发送的数据是否包含某个具体的值
+         //  initContainsRxJava();
+          // ⑧ isEmpty     发送的数据是否为空
+        //   initIsEmpty();
+          // ⑨ amb       当需要发送多个Observable ，只发送先发送数据的Observable，其余的责备抛弃
+        //   initAmbRxJava();
+          // ⑩ defaultIfEmpty   在不发送任何有效事件下，仅发送onComplete事件，可以发送一个默认值
+         //  initDefaultEmptyRxJava();
 
 
+
+           //背压策略  被观察者发送事件过快，观察者处理不过来。
+           // initFlowable();
+           // initFlowableLimit();
+           // initFlowableLimitAsync();
+            // RaJava2.0 内部也帮我们实现了背压的方法：
+            //  .onBackpressureBuffer() // 添加背压策略封装好的方法，此处选择Buffer模式，即缓存区大小无限制
+            //  .onBackpressureDrop()   onBackpressureLatest()      // 自行了解
+    }
+
+    /**
+     * 背压处理： 异步处理
+     *    在异步中：
+     *     反向控制的原理是：通过RxJava内部固定调用被观察者线程中的request(n)  从而
+     *                      反向控制被观察者的发送事件速度
+     *
+     */
+    private void initFlowableLimitAsync() {
+        // 被观察者：一共需要发送500个事件，但真正开始发送事件的前提 = FlowableEmitter.requested()返回值 ≠ 0
+        // 观察者：每次接收事件数量 = 48（点击按钮）
+        Flowable.create(new FlowableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(FlowableEmitter<Integer> emitter) throws Exception {
+                Log.d(TAG, "观察者可接收事件数量 = " + emitter.requested());
+                boolean flag; //设置标记位控制
+
+                // 被观察者一共需要发送500个事件
+                for (int i = 0; i < 500; i++) {
+                    flag = false;
+                   // 若requested() == 0则不发送
+                    while (emitter.requested() == 0) {
+                        if (!flag) {
+                            Log.d(TAG, "不再发送");
+                            flag = true; }
+                    }
+                    // requested() ≠ 0 才发送
+                    Log.d(TAG, "发送了事件" + i + "，观察者可接收事件数量 = " + emitter.requested());
+                    emitter.onNext(i);
+                }
+            }
+        }, BackpressureStrategy.ERROR)
+                .subscribeOn(Schedulers.io()) // 设置被观察者在io线程中进行
+                .observeOn(AndroidSchedulers.mainThread()) // 设置观察者在主线程中进行
+                // 步骤2：创建观察者 =  Subscriber & 建立订阅关系
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        // 对比Observer传入的Disposable参数，Subscriber此处传入的参数 = Subscription
+                        // 相同点：Subscription参数具备Disposable参数的作用，即Disposable.dispose()切断连接,
+                        // 同样的调用Subscription.cancel()切断连接
+                        // 不同点：Subscription增加了void request(long n)
+
+
+
+                        Log.d(TAG, "onSubscribe");
+                        // 可通过点击事件动态控制
+                        mSubscription = s;
+                        // 初始状态 = 不接收事件；通过点击按钮接收事件
+                    }
+
+                    @Override
+                    public void onNext(Integer s) {
+                        Log.d(TAG, "接收到了事件" + s);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.d(TAG, "onError" + t);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete");
+                    }
+                });
+
+
+    }
+    /**
+     *  背压处理： 根据  观察者响应式拉取  控制   被观察者的发布事件速度
+     *  在同步中 requested  具有叠加性 ，因为没有缓存区。
+     *             s.request(10); // 第1次设置观察者每次能接受10个事件
+                   s.request(20); // 第2次设置观察者每次能接受20个事件
+                           实时更新性  emitter.requested()的值
+                           异常：
+                          ①当FlowableEmitter.requested()减到0时，则代表观察者已经不可接收事件
+                          此时被观察者若继续发送事件，则会抛出MissingBackpressureException异常
+                          ② 如观察者可接收事件数量 = 1，当被观察者发送第2个事件时，就会抛出异常
+                              （意思就是我只接收一个，你却给我发两个甚至更多）
+
+                   
+
+     */
+    private void initFlowableLimit() {
+        Flowable.create(new FlowableOnSubscribe<String>() {
+            @Override
+            public void subscribe(FlowableEmitter<String> emitter) throws Exception {
+                // 调用emitter.requested()获取当前观察者需要接收的事件数量
+                long n = emitter.requested();
+                Log.d(TAG, "观察者可接收事件" + n);
+                
+                // 根据emitter.requested()的值，即当前观察者需要接收的事件数量来发送事件
+                for (int i = 0; i < n; i++) {
+                    Log.d(TAG, "发送了事件" + i);
+                    emitter.onNext(String.valueOf(i));
+                }
+
+
+
+            }
+        }, BackpressureStrategy.ERROR)
+                // 步骤2：创建观察者 =  Subscriber & 建立订阅关系
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        // 对比Observer传入的Disposable参数，Subscriber此处传入的参数 = Subscription
+                        // 相同点：Subscription参数具备Disposable参数的作用，即Disposable.dispose()切断连接,
+                        // 同样的调用Subscription.cancel()切断连接
+                        // 不同点：Subscription增加了void request(long n)
+
+
+
+                        Log.d(TAG, "onSubscribe");
+                        // 可通过点击事件动态控制
+                        s.request(3);
+                        // 作用：决定观察者能够接收多少个事件
+                        // 如设置了s.request(3)，这就说明观察者能够接收3个事件（多出的事件存放在缓存区）
+                        // 官方默认推荐使用Long.MAX_VALUE，即s.request(Long.MAX_VALUE);
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        Log.d(TAG, "接收到了事件" + s);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.d(TAG, "onError" + t);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete");
+                    }
+                });
+
+    }
+
+    /**
+     * 背压处理 之观察者响应式拉取
+     */
+    private void initFlowable() {
+        Flowable.create(new FlowableOnSubscribe<String>() {
+            @Override
+            public void subscribe(FlowableEmitter<String> emitter) throws Exception {
+                Log.d(TAG, "发送事件 1");
+                emitter.onNext("1"); Log.d(TAG, "发送事件 2");
+                emitter.onNext("2"); Log.d(TAG, "发送事件 3");
+                emitter.onNext("3"); Log.d(TAG, "发送完成");
+                emitter.onComplete();
+            }
+        }, BackpressureStrategy.ERROR)
+                .subscribeOn(Schedulers.io()) // 设置被观察者在io线程中进行
+                .observeOn(AndroidSchedulers.mainThread()) // 设置观察者在主线程中进行
+                // 步骤2：创建观察者 =  Subscriber & 建立订阅关系
+                .subscribe(new Subscriber<String>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+                // 对比Observer传入的Disposable参数，Subscriber此处传入的参数 = Subscription
+                // 相同点：Subscription参数具备Disposable参数的作用，即Disposable.dispose()切断连接,
+                // 同样的调用Subscription.cancel()切断连接
+                // 不同点：Subscription增加了void request(long n)
+
+
+
+                Log.d(TAG, "onSubscribe");
+                s.request(3);
+                // 作用：决定观察者能够接收多少个事件
+                // 如设置了s.request(3)，这就说明观察者能够接收3个事件（多出的事件存放在缓存区）
+                // 官方默认推荐使用Long.MAX_VALUE，即s.request(Long.MAX_VALUE);
+            }
+
+            @Override
+            public void onNext(String s) {
+                Log.d(TAG, "接收到了事件" + s);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.d(TAG, "onError" + t);
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "onComplete");
+            }
+        });
+
+    }
+
+    /**
+     * 场景：在不发送任何有效事件下，仅发送onComplete事件，可以发送一个默认值
+     */
+    private void initDefaultEmptyRxJava() {
+       Observable.create(new ObservableOnSubscribe<Integer>() {
+           @Override
+           public void subscribe(ObservableEmitter<Integer> e) throws Exception {
+               //不发送任何有效事件
+               e.onNext(null);
+               e.onNext(null);
+               e.onNext(null);
+
+               // 只发送Complete事件
+               e.onComplete();
+
+           }
+           // 发送一个默认值
+       }).defaultIfEmpty(10)
+               .subscribe(new Observer<Integer>() {
+           @Override
+           public void onSubscribe(Disposable d) {
+
+           }
+
+           @Override
+           public void onNext(Integer value) {
+               Log.d(TAG, "接收到了事件"+ value  );
+           }
+
+           @Override
+           public void onError(Throwable e) {
+
+           }
+
+           @Override
+           public void onComplete() {
+
+           }
+       });
+
+
+        // 结果是：   10
+    }
+
+
+    /**
+     * 场景：   当需要发送多个Observable ，只发送先发送数据的Observable，其余的责备抛弃
+     *
+     */
+    private void initAmbRxJava() {
+        // 设置2个需要发送的Observable & 放入到集合中
+       List<Observable<Integer>> list = new ArrayList<>();
+        // 第1个Observable延迟1秒发射数据
+        list.add(Observable.just(1,2,3).delay(1,TimeUnit.SECONDS));
+        // 第2个Observable正常发送数据
+        list.add(Observable.just(4,5,6));
+
+        // 一共需要发送2个Observable的数据
+        // 但由于使用了amba（）,所以仅发送先发送数据的Observable
+        // 即第二个（因为第1个延时了）
+        Observable.amb(list).subscribe(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer integer) throws Exception {
+                Log.e(TAG, "接收到了事件 "+integer);
+            }
+        });
+
+        // 输出结果： 4.5.6
+
+    }
+
+
+    /**
+     * 场景： 判断发送的数据是否为空
+     */
+    private void initIsEmpty() {
+         Observable.just(1,3,4,5,3).isEmpty().subscribe(new Consumer<Boolean>() {
+             @Override
+             public void accept(Boolean aBoolean) throws Exception {
+                 Log.d(TAG,"结果是"+aBoolean);
+             }
+         });
+         // 输出的结果： false
+         // 若为空，返回 true；否则，返回 false
+    }
+
+
+    /**
+     * 场景：发送的数据是否包含某个具体的值
+     */
+    private void initContainsRxJava() {
+       Observable.just(1,2,4,5,30)
+               .contains(2)
+               .subscribe(new Consumer<Boolean>() {
+           @Override
+           public void accept(Boolean aBoolean) throws Exception {
+               Log.d(TAG,"结果是"+aBoolean);
+           }
+       });
+
+    }
+
+    /**
+     * 场景：比较两个Observable 发送的数据是否相等
+     */
+    private void initSequenceEqualRxJava() {
+         Observable.sequenceEqual(Observable.just(1,3,4),Observable.just(1,3,4))
+                 .subscribe(new Consumer<Boolean>() {
+             @Override
+             public void accept(Boolean aBoolean) throws Exception {
+                 Log.d(TAG,"两个是否相同"+aBoolean);
+             }
+         });
+
+    }
+
+
+    /**
+     * 场景： 判断条件事Observable
+     * skipUntil  条件操作符
+     */
+    private void initSkipUntilRxJava() {
+        // （原始）第1个Observable：每隔1s发送1个数据 = 从0开始，每次递增1
+         Observable.interval(1,TimeUnit.SECONDS)
+                 // 第2个Observable：延迟5s后开始发送1个Long型数据
+                 .skipUntil(Observable.timer(5,TimeUnit.SECONDS))
+                 .subscribe(new Observer<Long>() {
+             @Override
+             public void onSubscribe(Disposable d) {
+                 Log.d(TAG, "开始采用subscribe连接");
+             }
+
+             @Override
+             public void onNext(Long value) {
+                 Log.d(TAG, "接收到了事件"+ value  );
+             }
+
+             @Override
+             public void onError(Throwable e) {
+                 Log.d(TAG, "对Error事件作出响应");
+             }
+
+             @Override
+             public void onComplete() {
+                 Log.d(TAG, "对Complete事件作出响应");
+             }
+         });
+
+        //5s后（ skipUntil（） 传入的Observable开始发送数据），（原始）第1个Observable的数据才开始发送
+        // 输出结果：  开始采用subscribe连接
+        // 接收到了事件4，
+        // 接收到了事件5
+        // 接收到了事件6
+        // 接收到了事件7
+        //接收到了事件 ....
+
+
+    }
+
+    /**
+     * 场景： 判断条件是Observable
+     * takeUntil  条件操作符
+     */
+    private void initTakeUntilTwoRxJava() {
+        // （原始）第1个Observable：每隔1s发送1个数据 = 从0开始，每次递增1
+        Observable.interval(1,TimeUnit.SECONDS)
+                // 第2个Observable：延迟5s后开始发送1个Long型数据
+                .takeUntil(Observable.timer(5,TimeUnit.SECONDS))
+                .subscribe(new Observer<Long>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.d(TAG, "开始采用subscribe连接");
+            }
+
+            @Override
+            public void onNext(Long value) {
+                Log.d(TAG, "接收到了事件"+ value  );
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "对Error事件作出响应");
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "对Complete事件作出响应");
+            }
+        });
+
+        // 输出结果： 当第 5s 时，第2个 Observable 开始发送数据，于是（原始）第1个 Observable 停止发送数据
+        // 开始采用subscribe连接
+        //        接收到了事件0
+        //        接收到了事件1
+        //        接收到了事件2
+        //        接收到了事件3
+        //        接收到了事件4
+        //对Complete事件作出响应
+
+    }
+
+    /**
+     * 场景： 执行到满足条件事，就停止发送数据
+     * takeUntil  条件操作符
+     */
+    private void initTakeUntilRxJava() {
+         Observable.interval(1,TimeUnit.SECONDS).takeUntil(new Predicate<Long>() {
+             @Override
+             public boolean test(Long aLong) throws Exception {
+                 return aLong>3;
+                 // 返回true时，就停止发送事件
+                 // 当发送的数据满足>3时，就停止发送Observable的数据
+             }
+         }).subscribe(new Consumer<Long>() {
+             @Override
+             public void accept(Long aLong) throws Exception {
+                 Log.d(TAG,"发送了事件 "+ aLong);
+             }
+         });
+         // 输出结果： 0.1.2.3.4 （4 > 3 则停止发送数据）
+    }
+
+    /**
+     * 场景： 判断发射的数据是否都满足条件
+     * skipWhile 条件操作符  (发送不满足数据)
+     */
+    private void initSkipWhileRxjava() {
+       Observable.interval(1,TimeUnit.SECONDS).skipWhile(new Predicate<Long>() {
+           @Override
+           public boolean test(Long aLong) throws Exception {
+               // 直到判断条件不成立 = false = 发射的数据≥5，才开始发送数据
+               return aLong<5;
+           }
+       }).subscribe(new Consumer<Long>() {
+           @Override
+           public void accept(Long aLong) throws Exception {
+               Log.d(TAG,"发送了事件 "+ aLong);
+           }
+       });
+        // 输出结果: 5,6,7,8,9,10......(依次往后)
+    }
+
+    /**
+     * 场景： 判断发射的数据是否都满足条件
+     * takeWhile 条件操作符 (发送满足数据)
+     */
+    private void initTakeWithRxjava() {
+        // 1. 每1s发送1个数据 = 从0开始，递增1，即0、1、2、3
+        Observable.interval(1,TimeUnit.SECONDS)
+                // 2. 通过takeWhile传入一个判断条件
+                .takeWhile(new Predicate<Long>() {
+            @Override
+            public boolean test(Long aLong) throws Exception {
+                // 当发送的数据满足<3时，才发送Observable的数据
+                return aLong < 3;
+            }
+        }).subscribe(new Consumer<Long>() {
+            @Override
+            public void accept(Long aLong) throws Exception {
+                Log.d(TAG,"发送了事件 "+ aLong);
+            }
+        });
+       // 最后的结果：0,1，2
+    }
+
+    /**
+     * 场景：判断发射的数据是否都满足条件
+     * all  条件操作符
+     */
+    private void initAllRxjava() {
+        Observable.just(1,2,3,4,5,8)
+                .all(new Predicate<Integer>() {
+            @Override
+            public boolean test(Integer integer) throws Exception {
+                return integer <= 10;
+            }
+        }).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Exception {
+                 Log.d(TAG,"输出结果："+aBoolean);
+            }
+        });
+       // 最后的结果肯定是true
     }
 
     /**
@@ -1985,7 +2504,7 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
             @Override
             public ObservableSource<String> apply(Integer integer) throws Exception {
                 for (int j = 0; j < 3; j++) {
-                    list.add("我是事件" + integer + "即将被拆分为事件" + i);
+                    list.add("我是事件" + integer + "即将被拆分为事件" + j);
                     // 通过flatMap中将被观察者生产的事件序列先进行拆分，再将每个事件转换为一个新的发送三个String事件
                     // 最终合并，再发送给被观察者
                 }
@@ -2041,12 +2560,27 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
             }
         });
 
+        text_two.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSubscription.request(48);
+            }
+        });
+        textThree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RxJavaStudyTwoActivity.this, RxJavaThreeActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
 
     private void initView() {
         text_one = ((TextView) findViewById(R.id.text_rxjava_create_one));
-
+        text_two = ((TextView) findViewById(R.id.text_rxjava_create_two));
+        textThree = ((TextView) findViewById(R.id.text_rxjava_create_three));
     }
 
 
@@ -2350,7 +2884,8 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
             }
 
             // 通过订阅（subscribe）来实现被观察者和观察者之间的联系
-        }).subscribe(new Observer<Integer>() {
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Integer>() {
             // 创建观察者 并 做一些事情
             @Override
             public void onSubscribe(Disposable d) {

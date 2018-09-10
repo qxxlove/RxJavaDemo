@@ -119,5 +119,6 @@
             android:layout_height="wrap_content"
             android:text="text图文混排"
             />
+
     </LinearLayout>
 </ScrollView>

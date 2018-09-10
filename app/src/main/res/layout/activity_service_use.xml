@@ -38,6 +38,37 @@
         android:textSize="20sp"
         android:gravity="center"
         android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+    <TextView
+        android:id="@+id/text_service_activity"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="startService Activity"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+    <TextView
+        android:id="@+id/text_handler_thread_activity"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="HandlerStudyActivity"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+    <TextView
+        android:id="@+id/text_intent_service_activity"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="IntentServiceActivity"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
         />
 
 </LinearLayout>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.dell.rxjavademo.service.ServiceTwoActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+    <TextView
+        android:id="@+id/text_start_service"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="启动服务(start)"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+    <TextView
+        android:id="@+id/text_stop_service"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="停止服务(Stop)"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+
+    <TextView
+        android:id="@+id/text_bind_start_service"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="绑定启动服务(Binder)"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+    <TextView
+        android:id="@+id/text_unbind_start_service"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="解绑 服务(unBinder)"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+
+    <TextView
+        android:id="@+id/text_bind_messenger_start_service"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="绑定服务(Binder之Messenger)"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+    <TextView
+        android:id="@+id/text_bind_messenger_send"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="发送消息(Binder之Messenger)"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+    <TextView
+        android:id="@+id/text_unbind_messenger_start_service"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="解绑服务(Binder之Messenger)"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+
+    <TextView
+        android:id="@+id/text_start_service_foreground"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="开启前台服务"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+    <TextView
+        android:id="@+id/text_start_service_foreground_stop"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="停止前台服务"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+    </LinearLayout>
+</ScrollView>

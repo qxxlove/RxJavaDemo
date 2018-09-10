@@ -17,6 +17,24 @@
         android:gravity="center"
         android:background="@color/text_white"
         />
+    <TextView
+        android:id="@+id/text_rxjava_create_two"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="RxJava背压之异步处理"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+    <TextView
+        android:id="@+id/text_rxjava_create_three"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="RxJava之compose和TransFormer使用"
+        android:gravity="center"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
 
 
 </LinearLayout>

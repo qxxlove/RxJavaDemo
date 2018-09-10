@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.dell.rxjavademo.AIDLMyCallbackListener;
 import com.example.dell.rxjavademo.IMyAidlInterface;
 import com.example.dell.rxjavademo.R;
+import com.example.dell.rxjavademo.handler.HandlerStudyActivity;
 import com.example.dell.rxjavademo.utils.BaseUtils;
 
 /**
@@ -52,7 +53,7 @@ public class ServiceUseActivity extends AppCompatActivity  {
 
     private IMyAidlInterface iMyAidlInterface;
 
-    // 普通的service连接
+    /**普通的service连接*/
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, final IBinder service) {
@@ -72,7 +73,7 @@ public class ServiceUseActivity extends AppCompatActivity  {
     };
 
 
-    // 跨进程的service连接
+    /**跨进程的service连接*/
     ServiceConnection serviceConnectionAIDL = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, final IBinder service) {
@@ -88,6 +89,7 @@ public class ServiceUseActivity extends AppCompatActivity  {
                     @Override
                     public void onResponse(String reviewContent) throws RemoteException {
                         Log.e("TAG", "receive message from service: "+reviewContent);
+                        BaseUtils.toast(reviewContent);
                     }
 
                     @Override
@@ -110,7 +112,7 @@ public class ServiceUseActivity extends AppCompatActivity  {
     private TextView text_send;
     private TextView text_review;
     private TextView text_send_aidl;
-
+    private TextView text_start_service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +127,28 @@ public class ServiceUseActivity extends AppCompatActivity  {
         text_send = ((TextView) findViewById(R.id.text_activity_send));
         text_review = ((TextView) findViewById(R.id.text_service_review));
         text_send_aidl = ((TextView) findViewById(R.id.text_activity_send_aidl));
+        text_start_service =  ((TextView) findViewById(R.id.text_service_activity));
+
+        text_start_service.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               startActivity(new Intent(ServiceUseActivity.this,ServiceTwoActivity.class));
+            }
+        });
+
+        findViewById(R.id.text_handler_thread_activity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ServiceUseActivity.this,HandlerStudyActivity.class));
+
+            }
+        });
+        findViewById(R.id.text_intent_service_activity).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ServiceUseActivity.this,IntentServiceActivity.class));
+            }
+        });
 
     }
 
@@ -148,6 +172,9 @@ public class ServiceUseActivity extends AppCompatActivity  {
     }
 
 
+    /**
+     * Binder Service 服务
+     */
     private void initService() {
         // 第2步 ： 启动服务
         Intent intent = new Intent(ServiceUseActivity.this,MyService.class);
@@ -161,6 +188,9 @@ public class ServiceUseActivity extends AppCompatActivity  {
         });
     }
 
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+      
+    }
 }
