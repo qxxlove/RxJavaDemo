@@ -183,7 +183,7 @@ public class ServiceUseActivity extends AppCompatActivity  {
         text_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myBinder.testMethod("hi service");
+                myBinder.testMethod("binder  hi service");
             }
         });
     }

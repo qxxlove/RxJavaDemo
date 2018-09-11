@@ -19,7 +19,8 @@ public class RemoteService extends Service {
 
     public static final String TAG  = "RemoteService";
 
-    //Stub内部继承Binder，具有跨进程传输能力
+  
+    /**Stub内部继承Binder，具有跨进程传输能力*/
     IServiceAidlInterface.Stub iServiceAidlInterface = new IServiceAidlInterface.Stub() {
         @Override
         public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {

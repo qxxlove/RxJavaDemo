@@ -1,15 +1,21 @@
-package com.tjbool.httpwww.aidlclicentapp;
+package com.example.dell.rxjavademo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * 描述 ：
- * 作者：Created by SEELE on 2018/7/3.
- * 邮箱：123123@163.com
- */
+ * description:
+ * autour: TMM
+ * date: 2018/7/3 15:26
+ * update: 2018/7/3
+ * version:
+ *
+ *     如何将MessageBean转换为 .aidl 文件？
+ *
+*/
 
-public class MessageBean   implements Parcelable {
+public class MessageBean  implements Parcelable {
+
     private String content;//需求内容
     private int level;//重要等级
 
@@ -29,7 +35,7 @@ public class MessageBean   implements Parcelable {
         this.content = content;
     }
 
-
+    
     @Override
     public int describeContents() {
         return 0;
@@ -52,20 +58,20 @@ public class MessageBean   implements Parcelable {
         this.content = in.readString();
         this.level = in.readInt();
     }
-
+    
     public MessageBean() { }
 
     public  static  final   Creator<MessageBean> CREATOR = new Creator<MessageBean>() {
-        @Override
-        public MessageBean createFromParcel(Parcel source) {
-            return new MessageBean(source);
-        }
+            @Override
+            public MessageBean createFromParcel(Parcel source) {
+                return new MessageBean(source);
+            }
 
-        @Override
-        public MessageBean[] newArray(int size) {
-            return new MessageBean[size];
-        }
-    };
-
+            @Override
+            public MessageBean[] newArray(int size) {
+                return new MessageBean[size];
+            }
+        };
+  
 
 }
