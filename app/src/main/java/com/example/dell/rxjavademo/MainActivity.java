@@ -13,6 +13,7 @@ import com.example.dell.rxjavademo.activity.AnimationActivity;
 import com.example.dell.rxjavademo.activity.GridviewActivity;
 import com.example.dell.rxjavademo.activity.TextActivity;
 import com.example.dell.rxjavademo.activity.TextCommodityActivity;
+import com.example.dell.rxjavademo.designmode.DesignModeActivity;
 import com.example.dell.rxjavademo.eventbus.EventBusActivity;
 import com.example.dell.rxjavademo.okhttp3.OkhttpActivity;
 import com.example.dell.rxjavademo.retrofit.RetrofitActivity;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_service;
     private Button btn_commondity;
     private Button btn_text;
+    private Button btn_design;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +173,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,TextActivity.class));
             }
         });
+        btn_design.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,DesignModeActivity.class));
+            }
+        });
 
 
     }
@@ -192,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         btn_service = ((Button) findViewById(R.id.btn_service));
         btn_commondity = ((Button) findViewById(R.id.btn_commondity_info));
         btn_text = ((Button) findViewById(R.id.btn_text));
+        btn_design = ((Button) findViewById(R.id.btn_design));
     }
 
     public void click(View view) {

@@ -119,6 +119,12 @@
             android:layout_height="wrap_content"
             android:text="text图文混排"
             />
+        <Button
+            android:id="@+id/btn_design"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="设计模式"
+            />
 
     </LinearLayout>
 </ScrollView>

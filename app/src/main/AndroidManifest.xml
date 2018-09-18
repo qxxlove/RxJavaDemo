@@ -69,18 +69,15 @@
             android:process=":remote"/>
         <service android:name=".service.ForegroundService"/>
         <service android:name=".service.MyIntentService"/>
-        
         <service
             android:name=".RemoteService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.example.dell.rxjavademo" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="com.example.dell.rxjavademo"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
-
-
-
 
         <activity android:name=".activity.TextCommodityActivity">
         </activity>
@@ -95,6 +92,8 @@
         <activity android:name=".service.IntentServiceActivity">
         </activity>
         <activity android:name=".handler.HandlerStudyTwoActivity">
+        </activity>
+        <activity android:name=".designmode.DesignModeActivity">
         </activity>
     </application>
 

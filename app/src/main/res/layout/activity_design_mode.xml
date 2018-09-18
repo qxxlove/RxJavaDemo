@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.dell.rxjavademo.designmode.DesignModeActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="设计模式之代理模式"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="@dimen/activity_dimens_ten"
+        android:background="@color/text_white"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="设计模式之建造者（Builder）模式"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="@dimen/activity_dimens_ten"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+
+</LinearLayout>

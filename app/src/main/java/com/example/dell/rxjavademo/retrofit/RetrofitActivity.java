@@ -177,6 +177,10 @@ public class RetrofitActivity extends AppCompatActivity {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
+        /**create方法创建返回的正是Interface接口的代理对象，
+         * 每当代理对象调用目标接口里的方法时，
+         * 动态代理对象就会回调InvocationHandler接口的invoke实现方法。
+         */
         api = retrofit.create(Interface.class);  // 动态代理
 
     }
