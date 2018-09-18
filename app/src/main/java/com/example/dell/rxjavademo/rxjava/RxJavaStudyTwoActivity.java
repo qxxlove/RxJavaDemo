@@ -83,8 +83,8 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         // 一：定时创建（在x 秒之后），在一个固定的时间点
         // 二： 周期性创建，每隔x秒，开始创建
         //    initDaterRxJava();  // 动态创建
-        //    initTimerRxJava();  // 延时创建
-        //     initIntervalRaJava(); // 周期创建
+            initTimerRxJava();  // 延时创建
+          //  initIntervalRaJava(); // 周期创建
         //     initIntervalRangeRaJava(); // 限制条件更多，创建
         //    initRangeRaJava();    // 等同于IntervalRange ,区别在于没有延迟设置
         //    initRangeLongRaJava();   // 等同于 Range ,就是支持数据类型不同Long
@@ -137,7 +137,7 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         // ②  subscribeOn() 和 observeOn ()    功能操作符之 线程切换操作符
         // 通过 上述 subscribe 的例子，我们知道观察者和被观察者的发生都是在主线程中完成的，但是我们实际开发中，要比这复杂的很多
         // 我们也必须要遵从的原则"在主线程中更新UI,在子线程中执行耗时操作，所以就出现了subscribeOn 和 observeOn 操作符"
-        initSubscribeOnAndOberveOn();
+       // initSubscribeOnAndOberveOn();
         // ③ delay()                         功能操作符之 延迟操作符
         //initDelay();
         // ④ do 操作符                       功能操作符之 把控发送某个事件的生命周期
@@ -192,12 +192,12 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         // 条件/布尔操作符
          // ① all    判断发送的数据是否都满足条件
          // initAllRxjava();
-         // ② takeWhile  判断发送的数据是否都满足条件（同上区别： 满足才发送，不满足则不发送）
+        //② takeWhile  判断发送的数据是否都满足条件（同上区别： 满足才发送，不满足则不发送）
         //  initTakeWithRxjava();
          // ③ skipWhile  判断发送的数据是否都满足条件（同上区别： 发送的是不满足的数据）
         //  initSkipWhileRxjava();
           // ④ takeUntil  执行到满足当前条件，则停止发送数据
-        //  initTakeUntilRxJava();
+          initTakeUntilRxJava();
            // 该判断条件也可以是Observable
          // initTakeUntilTwoRxJava();
           // ⑤ skipUntil  执行到满足当前条件，则发送之后的数据
@@ -615,6 +615,7 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
 
     }
 
+    private  boolean   isOk ;
     /**
      * 场景： 执行到满足条件事，就停止发送数据
      * takeUntil  条件操作符
@@ -623,7 +624,7 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
          Observable.interval(1,TimeUnit.SECONDS).takeUntil(new Predicate<Long>() {
              @Override
              public boolean test(Long aLong) throws Exception {
-                 return aLong>3;
+                 return isOk == true;
                  // 返回true时，就停止发送事件
                  // 当发送的数据满足>3时，就停止发送Observable的数据
              }

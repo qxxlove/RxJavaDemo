@@ -5,7 +5,7 @@ package com.example.dell.rxjavademo;
 // 参考：	Android 深入浅出AIDL（一）
 //  https://blog.csdn.net/qian520ao/article/details/78072250
 
-
+import com.example.dell.rxjavademo.IServiceMyCallbackListener;
 import com.example.dell.rxjavademo.MessageBean;
 
 
@@ -26,7 +26,8 @@ interface IServiceAidlInterface {
 
                void setDemandInOut(inout MessageBean msg);//客户端<->服务端
 
-                
+               void registerListener(IServiceMyCallbackListener listener);
+               void unregisterListener(IServiceMyCallbackListener listener);
 
 }
 

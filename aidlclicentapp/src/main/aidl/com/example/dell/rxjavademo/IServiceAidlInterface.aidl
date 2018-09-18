@@ -7,7 +7,7 @@ package com.example.dell.rxjavademo;
 
 
 import com.example.dell.rxjavademo.MessageBean;
-
+import com.example.dell.rxjavademo.IServiceMyCallbackListener;
 
 interface IServiceAidlInterface {
     /**
@@ -26,6 +26,8 @@ interface IServiceAidlInterface {
 
                void setDemandInOut(inout MessageBean msg);//客户端<->服务端
 
+               void registerListener(IServiceMyCallbackListener listener);
+               void unregisterListener(IServiceMyCallbackListener listener);
                 
 
 }

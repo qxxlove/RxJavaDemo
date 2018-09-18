@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.dell.rxjavademo.IServiceAidlInterface;
+import com.example.dell.rxjavademo.IServiceMyCallbackListener;
+import com.example.dell.rxjavademo.MessageBean;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +29,22 @@ public class MainActivity extends AppCompatActivity {
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
 
+    /**
+     * 消息推送
+     */
+    IServiceMyCallbackListener.Stub iServiceMyCallbackListener = new IServiceMyCallbackListener.Stub() {
+        @Override
+        public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
+
+        }
+
+        @Override
+        public void onResponse(MessageBean reviewContent) throws RemoteException {
+            //该方法运行在Binder线程池中，是非ui线程
+            Log.e("client3",reviewContent.getContent());
+        }
+    };
+
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -35,7 +53,22 @@ public class MainActivity extends AppCompatActivity {
            // iMyAidlInterface = .Stub.asInterface(service);
             iServiceAidlInterface = IServiceAidlInterface.Stub.asInterface(service);
             try {
-                Log.e("client",iServiceAidlInterface.getDemand().getContent());
+                Log.e("client1",iServiceAidlInterface.getDemand().getContent());
+                /** 数据流向 in 标识*/
+                MessageBean messageBean = new MessageBean();
+                messageBean.setContent("B 说：我就不敬礼");
+                iServiceAidlInterface.setDemandIn(messageBean);
+
+                /** 数据流向 inOut 标识*/
+                MessageBean messageBean1 = new MessageBean();
+                messageBean1.setContent("有什么事吗？");
+                iServiceAidlInterface.setDemandInOut(messageBean1);
+                // FIXME: 2018/9/12  这块可能有问题
+                Log.e("client2",iServiceAidlInterface.getDemand().getContent());
+
+
+                iServiceAidlInterface.registerListener(iServiceMyCallbackListener);
+
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
