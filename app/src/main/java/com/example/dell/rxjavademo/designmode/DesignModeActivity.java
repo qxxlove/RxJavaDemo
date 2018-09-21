@@ -1,10 +1,15 @@
 package com.example.dell.rxjavademo.designmode;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.dell.rxjavademo.R;
+import com.example.dell.rxjavademo.designmode.builder.*;
 import com.example.dell.rxjavademo.designmode.factory.AppAountLoginerFactory;
 import com.example.dell.rxjavademo.designmode.factory.bean.User;
 import com.example.dell.rxjavademo.designmode.factory.interf.UserInfoFactory;
@@ -28,13 +33,101 @@ import java.lang.reflect.Proxy;
 public class DesignModeActivity extends AppCompatActivity {
 
     private static final String TAG = "DesignModeActivity";
+    private TextView textOne;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_design_mode);
+        initView();
         initData();
         initFactory();
+        initBuilder();
+        initBuilderTwo();
+        initClick();
+
+    }
+
+    private void initBuilderTwo() {
+        Teacher.Builder builder = new Teacher.Builder();
+        builder.setAge(13)
+                .setJob("你猜")
+                .setName("后哈")
+                /**关键一步，对Teacher 进行赋值*/
+                .build();
+        
+    }
+
+    private void initClick() {
+        textOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog();
+            }
+        });
+    }
+
+    private void initView() {
+        textOne = ((TextView) findViewById(R.id.text_one_design));
+    }
+
+
+    /**
+     * 此处只是为了分析Builder 模式
+     * 更好地理解
+     * @param 
+     */
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.icon);
+        builder.setTitle("Title");
+        builder.setMessage("Message");
+        builder.setPositiveButton("Button1",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        setTitle("点击了对话框上的Button1");
+                    }
+                });
+        builder.setNeutralButton("Button2",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        setTitle("点击了对话框上的Button2");
+                    }
+                });
+        builder.setNegativeButton("Button3",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        setTitle("点击了对话框上的Button3");
+                    }
+                });
+        // 构建AlertDialog， 并且显示
+        builder.create().show();
+    }
+
+    
+
+
+    /**
+     * 最基础也是最繁琐的Builder ，实际开发中不推荐
+     * 所以出来后面的Android中 AlertDialog 中Builder的经典实现
+     */
+    private void initBuilder() {
+        // 构建器
+        IBuilder builder = new MyBuilder();
+        // ① Director 封装构建过程
+       // Director pcDirector = new Director(builder);
+        // 封装构建过程, 4核, 内存2GB, Mac系统
+        //pcDirector.construct(4, 2, "Mac OS X 10.9.1");
+        // ② 不封装，直接构建
+        builder.buildRAM(2);
+        builder.buildOs("Mac OS X 10.9.1");
+        builder.buildCPU(4);
+        // 构建电脑, 输出相关信息
+        Log.e(TAG,"Computer Info : " + builder.create().toString());
+
     }
 
     /**
@@ -47,6 +140,14 @@ public class DesignModeActivity extends AppCompatActivity {
      *             目标接口就是 IBaseUser，
      *            目标对象 另外新建一个类实现目标接口，
      *            利用代理模式。
+     *
+     *  思考： 多种支付方式的切换、
+     *         多种地图 SDK 的切换、
+     *         多种网络框架的切换、
+     *         多种持久化数据存储方式的切换、
+     *         多种数据处理方式的切换、
+     *         多种图片加载器的切换等等。
+     *
      */
     // FIXME: 2018/9/18  先有思路，在实践
     private void initFactory() {

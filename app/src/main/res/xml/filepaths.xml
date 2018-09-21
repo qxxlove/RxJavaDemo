@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- external-path:sd ；path:你的应用保存文件的根目录；name随便定义-->
+    <!-- root-path 手机存储根目录 -->
+    <root-path path="" name="honjane" />
+</paths>
+
+
+<!--说明-->
+<!--FileProvider 只能为指定的目录中的文件生成内容 URI。要指定目录，就必须使用 <paths> 元素的子元素在 XML 中指定其存储区域和路径。
+
+  <paths> 必须包含以下元素中一个或者多个子元素
+    <root-path>	代表设备的根目录 new File("/")
+    <files-path>	代表 context.getFileDir()
+    <cache-path>	代表 context.getCacheDir()
+    <external-path>	代表 Environment.getExternalStorageDirectory()
+    <external-files-path>	代表 context.getExternalFilesDirs()
+    <external-cache-path>	代表 getExternalCacheDirs()
+
+    例如： path 即为代表目录下的子目录，例如：
+          <external-path name="external" path="pics"/>
+          代表的目录即为：Environment.getExternalStorageDirectory()/pics
+
+    为什么要写这个文件呢？
+    需要一个虚拟的路径对文件路径进行映射，所以需要编写个 xml 文件，通过 path 以及 xml 节点确定可访问的目录，
+    通过 name 属性来映射真实的文件路径
+
+
+-->
+
+

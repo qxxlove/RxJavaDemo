@@ -83,6 +83,14 @@ public class HandlerStudyActivity extends AppCompatActivity {
             //每个1秒去更新图片
             childHandler.sendEmptyMessageDelayed(i,1000*i);
         }
+
+      /*  childHandler.post(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });*/
+
     }
 
     /**构建循环消息处理机制*/
@@ -99,6 +107,7 @@ public class HandlerStudyActivity extends AppCompatActivity {
             msg1.obj =imageModel;
             //通知主线程去更新UI
             mUIHandler.sendMessage(msg1);
+            
             return false;
         }
     }

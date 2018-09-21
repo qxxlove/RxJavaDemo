@@ -57,9 +57,11 @@ public class RetrofitActivity extends AppCompatActivity {
     }
 
     private void initClick() {
+        
         btn_get.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /**get 请求方式*/
                 requestApi(v);
                 reQuestUser();
                 // 带参的
@@ -67,6 +69,7 @@ public class RetrofitActivity extends AppCompatActivity {
             }
         });
 
+        /**post 请求方式*/
         button_retrofit_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +77,7 @@ public class RetrofitActivity extends AppCompatActivity {
             }
         });
 
+        /**实例： 模拟用户登录并取出用户信息*/
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +111,7 @@ public class RetrofitActivity extends AppCompatActivity {
         });
 
 
+        /**上述实例进一步改装： 结合RxJava*/
         btn_rxjava_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,9 +174,25 @@ public class RetrofitActivity extends AppCompatActivity {
         });
     }
 
-    private void initData() {
-        // 实际开发中，Retrofit实例化应该放在 Application中 ，baseUrl 也应该是动态设置的
 
+    /**
+     *   ① Retrofit 构建的时候，为其设置了 Gson 的工厂对象。
+
+         ② 上面可知 call.enqueue(callback)，call 就是 OkHttpCall 对象。
+
+         ③ enqueue 创建的时候会先调 createRawCall
+
+         ④ createRawCall 会先调用 serviceMethod 的 toRequest 方法
+
+         ⑤ 在 toRequest方法中，创建 RequestBuild 对象，并且把设置的业务请求的 api 里的参数对象请求体 Body
+           使用 Gson 工厂创建的 FastJsonRequestConverter 来 convert 出一个 RequestBody 设置给 RequestBuild 对象，
+           并最终通过构建者模式创建 Request 对象。
+
+         ⑥ 再通过 callFactory 工厂创建一个用于请求的 call，最终交由okhttp 的 enqueue 方法来发起真正的网络请求。
+     */
+    private void initData() {
+
+        /**实际开发中，Retrofit实例化应该放在 Application中 ，baseUrl 也应该是动态设置的*/
         Retrofit retrofit =  new Retrofit.Builder().baseUrl("") // ip地址
                 .addConverterFactory(GsonConverterFactory.create())    // 配置
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -209,9 +230,10 @@ public class RetrofitActivity extends AppCompatActivity {
             }
         });
     }
+    
 
-    /*基本写法
-     *
+    /**
+     * 基本写法
      */
     public  void  reQuestUser () {
         Call<User>  call = api.getUser();
@@ -229,8 +251,8 @@ public class RetrofitActivity extends AppCompatActivity {
     }
 
 
-       /*
-        * 带参数的
+       /**
+        * get 方式带参数的
         */
     public  void  reQuestUserParams () {
 
@@ -272,7 +294,7 @@ public class RetrofitActivity extends AppCompatActivity {
 
 
 
-    /*
+    /**
      *   post带参数的
      */
     public  void  reQuestPostUserParams () {

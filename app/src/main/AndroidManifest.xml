@@ -95,6 +95,28 @@
         </activity>
         <activity android:name=".designmode.DesignModeActivity">
         </activity>
+        <activity android:name=".androidversionchange.FileProviderActivity">
+        </activity>
+        <activity android:name=".androidversionchange.PermissionActivity">
+        </activity>
+        <activity android:name=".androidversionchange.NotificationActivity">
+        </activity>
+
+        <!-- authorities="你的包名+fileprovider"   解决android 7.0 拍照 -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.dell.rxjavademo.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths"/>
+        </provider>
+
+        <activity android:name=".thread.ThreadStudeyActivity">
+        </activity>
+        <activity android:name=".activity.RefActivity">
+        </activity>
     </application>
 
 </manifest><!--

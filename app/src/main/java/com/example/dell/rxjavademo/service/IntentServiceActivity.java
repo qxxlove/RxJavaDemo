@@ -49,6 +49,7 @@ public class IntentServiceActivity extends AppCompatActivity implements MyIntent
 
     /** 写法 ① */
     private  Handler handler = new Handler(getMainLooper());
+
     /** 写法 ②*/
     private Handler.Callback  callback = new Handler.Callback() {
         @Override
@@ -84,6 +85,9 @@ public class IntentServiceActivity extends AppCompatActivity implements MyIntent
             startService(intent);
         }
         MyIntentService.setUpdateUI(this);
+
+        
+
         
     }
 
