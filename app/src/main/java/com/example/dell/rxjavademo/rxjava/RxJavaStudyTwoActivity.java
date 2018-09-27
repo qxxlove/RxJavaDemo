@@ -68,8 +68,8 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rx_java_study_two);
         initView();
 
-
-        // 创建操作符的使用
+        
+        /**创建操作符的使用*/
         //①最基本的使用，不考虑任何封装，，实用等
         initRaJava();
         //② 快速创建 被观察者 ， just(最多只能发送十个参数)（经验之谈，没试过）
@@ -82,16 +82,17 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         // ⑤ 延时创建 又分为：
         // 一：定时创建（在x 秒之后），在一个固定的时间点
         // 二： 周期性创建，每隔x秒，开始创建
-        //    initDaterRxJava();  // 动态创建
-            initTimerRxJava();  // 延时创建
-          //  initIntervalRaJava(); // 周期创建
+           // initDaterRxJava();  // 动态创建
+          //  initTimerRxJava();  // 延时创建
+           // initIntervalRaJava(); // 周期创建
         //     initIntervalRangeRaJava(); // 限制条件更多，创建
         //    initRangeRaJava();    // 等同于IntervalRange ,区别在于没有延迟设置
         //    initRangeLongRaJava();   // 等同于 Range ,就是支持数据类型不同Long
 
         initClick();
 
-        // 转换操作符的使用
+       
+        /**转换操作符的使用*/
         // ①  最简单的Map 转换操作符
         //  initMapRaJava();
         // ②  FlatMap
@@ -102,7 +103,8 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         //  initBufferRaJava();
 
 
-        // 组合操作符的使用
+      
+        /**组合操作符的使用*/
         // ①  concat(1<= 组合被观察者的个数（<= 4）) / concatArray  (组合被观察者的个数（> 4）)
         //initConcatRxJava();
         //initConcatArrayRxJava();
@@ -131,7 +133,8 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         // ⑩ count     统计被观察者发布事件的个数
         //initCountRxJava();
 
-        // 功能性操作符
+       
+        /**功能性操作符*/
         // ①  subscribe                        功能操作符之   订阅即连接观察者和被观察者
         //initSubscribe();
         // ②  subscribeOn() 和 observeOn ()    功能操作符之 线程切换操作符
@@ -155,8 +158,8 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         //initRepeat();
         //initRepeatWhen();
 
-
-        // 过滤性操作符
+        
+        /**过滤性操作符*/
         // 指定条件的过滤事件
         //①  filter
         //initFilterRaJava();
@@ -189,7 +192,8 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         // ③ elementAtError       在elementAt的基础上，索引越界即报异常
         //initElementAtErrorRaJava();
 
-        // 条件/布尔操作符
+       
+        /**条件/布尔操作符*/
          // ① all    判断发送的数据是否都满足条件
          // initAllRxjava();
         //② takeWhile  判断发送的数据是否都满足条件（同上区别： 满足才发送，不满足则不发送）
@@ -214,8 +218,8 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
          //  initDefaultEmptyRxJava();
 
 
-
-           //背压策略  被观察者发送事件过快，观察者处理不过来。
+        
+        /**背压策略  被观察者发送事件过快，观察者处理不过来。*/
            // initFlowable();
            // initFlowableLimit();
            // initFlowableLimitAsync();
