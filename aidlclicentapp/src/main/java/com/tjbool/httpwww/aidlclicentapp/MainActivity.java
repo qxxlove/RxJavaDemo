@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             //得到该对象之后，我们就可以用来进行进程间的方法调用和传输啦。
            // iMyAidlInterface = .Stub.asInterface(service);
+            /**用于将服务端的Binder对象转换成客户端所需的AIDL接口类型的对象，
+             * 这种转换过程是区分进程的【如果客户端和服务端位于同一进程，
+             * 那么此方法返回的就是服务端的Stub对象本身，否则返回的是系统封装后的Stub.proxy对象】*/
             iServiceAidlInterface = IServiceAidlInterface.Stub.asInterface(service);
             try {
                 Log.e("client1",iServiceAidlInterface.getDemand().getContent());

@@ -7,9 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dell.rxjavademo.R;
-import com.example.dell.rxjavademo.designmode.builder.*;
+import com.example.dell.rxjavademo.designmode.builder.IBuilder;
+import com.example.dell.rxjavademo.designmode.builder.MyBuilder;
+import com.example.dell.rxjavademo.designmode.builder.Teacher;
 import com.example.dell.rxjavademo.designmode.factory.AppAountLoginerFactory;
 import com.example.dell.rxjavademo.designmode.factory.bean.User;
 import com.example.dell.rxjavademo.designmode.factory.interf.UserInfoFactory;
@@ -46,6 +49,7 @@ public class DesignModeActivity extends AppCompatActivity {
         initBuilderTwo();
         initClick();
 
+        Toast.makeText(DesignModeActivity.this, "Toast", Toast.LENGTH_SHORT).show();
     }
 
     private void initBuilderTwo() {
@@ -82,6 +86,7 @@ public class DesignModeActivity extends AppCompatActivity {
         builder.setIcon(R.drawable.icon);
         builder.setTitle("Title");
         builder.setMessage("Message");
+        builder.setCancelable(false);
         builder.setPositiveButton("Button1",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -105,6 +110,12 @@ public class DesignModeActivity extends AppCompatActivity {
                 });
         // 构建AlertDialog， 并且显示
         builder.create().show();
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                dialog.dismiss();
+            }
+        });
     }
 
     

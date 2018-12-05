@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.dell.rxjavademo.activity.AnimationActivity;
+import com.example.dell.rxjavademo.activity.FloatMenuActivity;
 import com.example.dell.rxjavademo.activity.GridviewActivity;
 import com.example.dell.rxjavademo.activity.TextActivity;
 import com.example.dell.rxjavademo.activity.TextCommodityActivity;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_commondity;
     private Button btn_text;
     private Button btn_design;
+    private Button btn_float_menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,6 +181,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,DesignModeActivity.class));
             }
         });
+        btn_float_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,FloatMenuActivity.class));
+            }
+        });
 
 
     }
@@ -201,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
         btn_commondity = ((Button) findViewById(R.id.btn_commondity_info));
         btn_text = ((Button) findViewById(R.id.btn_text));
         btn_design = ((Button) findViewById(R.id.btn_design));
+        btn_float_menu = ((Button) findViewById(R.id.btn_float_menu));
     }
 
     public void click(View view) {

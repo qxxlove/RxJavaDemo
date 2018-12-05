@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- 系统悬浮窗 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -119,6 +122,11 @@
         </activity>
         <activity android:name=".activity.StringActivity">
         </activity>
+        <activity android:name=".activity.FloatMenuActivity">
+        </activity>
+
+        <service android:name=".service.FloatView.ServiceFloatView"></service>
+
     </application>
 
 </manifest><!--

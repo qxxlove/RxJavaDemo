@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.dell.rxjavademo.activity.FloatMenuActivity">
+
+    <TextView
+        android:id="@+id/text_star_float"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="启动悬浮窗"
+        android:gravity="center_vertical"
+        android:background="@color/text_white"
+        />
+    <TextView
+        android:id="@+id/text_stop_float"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="关闭悬浮窗"
+        android:gravity="center_vertical"
+        android:background="@color/text_white"
+        android:layout_marginTop="@dimen/activity_dimens_ten"
+        />
+
+
+</LinearLayout>
