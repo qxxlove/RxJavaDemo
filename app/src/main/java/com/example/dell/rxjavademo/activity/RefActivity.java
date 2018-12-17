@@ -71,8 +71,6 @@ public class RefActivity extends AppCompatActivity {
            弱引用也可以和一个引用队列（ReferenceQueue）联合使用，
           如果弱引用所引用的对象被垃圾回收，Java虚拟机就会把这个弱引用加入到与之关联的引用队列中。
           这点同弱引用一致。
-
-        
      *
      *
      */
