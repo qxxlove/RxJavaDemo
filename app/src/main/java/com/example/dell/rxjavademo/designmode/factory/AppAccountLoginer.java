@@ -37,5 +37,20 @@ public class AppAccountLoginer  extends BaseUserLogin<User> {
     @Override
     public void loginOut(User user) {
         super.loginOut(user);
+        Log.e("AppAccountLoginer",user.getName()+":退出成功");
+    }
+
+    @Override
+    public void register(User user) {
+        Log.e("AppAccountLoginer",user.getName()+":注册成功");
+    }
+
+    @Override
+    public void saveLoginInfo(User user) {
+    }
+
+    @Override
+    public void getLoginInfo(User user) {
+
     }
 }

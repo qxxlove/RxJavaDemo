@@ -27,7 +27,7 @@ public class AppAountLoginerFactory extends BaseUserInfoFactory {
 
     @Override
     public IBaseUser.IUerRegister getRegisterUser() {
-        return super.getRegisterUser();
+        return new AppAccountLoginer(getmContext());
     }
 
     @Override

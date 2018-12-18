@@ -29,7 +29,6 @@ public class Student {
      *无参数方法
      */
     public void setName1 (){
-        System.out.println("");
         Log.e("DesignModeActivity","调用了无参方法：setName1（）");
 
     }
@@ -42,7 +41,6 @@ public class Student {
      * @param str
      */
     public void setName2 (String str){
-        System.out.println("" + str);
         Log.e("DesignModeActivity","调用了有参方法setName2（String str）:"+str);
 
     }

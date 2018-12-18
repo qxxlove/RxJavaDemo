@@ -10,7 +10,8 @@ import com.example.dell.rxjavademo.designmode.factory.interf.IBaseUser;
  *  此处并没有完，还可以实现其他的接口
  */
 
-public abstract  class BaseUserLogin<U extends IBaseUser>  implements IBaseUser.IUerLogin<U>  {
+public abstract  class BaseUserLogin<U extends IBaseUser>
+        implements IBaseUser.IUerLogin<U>,IBaseUser.IUerRegister<U> ,IBaseUser.IUerLoginInfo<U>  {
 
   
     /**
@@ -25,7 +26,7 @@ public abstract  class BaseUserLogin<U extends IBaseUser>  implements IBaseUser.
 
     @Override
     public void login(U u) {
-        
+
     }
 
     @Override

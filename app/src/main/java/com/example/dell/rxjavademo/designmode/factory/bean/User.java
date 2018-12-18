@@ -28,4 +28,6 @@ public class User  implements IBaseUser {
     public void setPass(String pass) {
         this.pass = pass;
     }
+
+    
 }

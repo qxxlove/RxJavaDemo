@@ -125,8 +125,10 @@
         <activity android:name=".activity.FloatMenuActivity">
         </activity>
 
-        <service android:name=".service.FloatView.ServiceFloatView"></service>
+        <service android:name=".service.FloatView.ServiceFloatView"/>
 
+        <activity android:name=".designmode.UserLoginFactoryActivity">
+        </activity>
     </application>
 
 </manifest><!--

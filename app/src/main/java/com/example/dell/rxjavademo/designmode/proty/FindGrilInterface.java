@@ -1,9 +1,7 @@
 package com.example.dell.rxjavademo.designmode.proty;
 
 /**
- * 描述 ：
- * 作者：Created by SEELE on 2018/9/18.
- * 邮箱：123123@163.com
+ * 目标接口： 要做的事情
  */
 
 public interface FindGrilInterface {

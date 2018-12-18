@@ -25,4 +25,19 @@ public class WeiXinAccountLoginer extends BaseUserLogin<User> {
     public void login(User user) {
         super.login(user);
     }
+
+    @Override
+    public void register(User user) {
+        
+    }
+
+    @Override
+    public void saveLoginInfo(User user) {
+
+    }
+
+    @Override
+    public void getLoginInfo(User user) {
+
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.dell.rxjavademo.designmode;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +14,6 @@ import com.example.dell.rxjavademo.R;
 import com.example.dell.rxjavademo.designmode.builder.IBuilder;
 import com.example.dell.rxjavademo.designmode.builder.MyBuilder;
 import com.example.dell.rxjavademo.designmode.builder.Teacher;
-import com.example.dell.rxjavademo.designmode.factory.AppAountLoginerFactory;
-import com.example.dell.rxjavademo.designmode.factory.bean.User;
-import com.example.dell.rxjavademo.designmode.factory.interf.UserInfoFactory;
 import com.example.dell.rxjavademo.designmode.proty.FindGrilInterface;
 import com.example.dell.rxjavademo.designmode.proty.Jessen;
 import com.example.dell.rxjavademo.designmode.proty.PateryProxy;
@@ -31,7 +29,9 @@ import java.lang.reflect.Proxy;
  * 设计模式
  *
  * 参考：
+ *      Builder 机制
  *      https://mp.weixin.qq.com/s/I4M1QCxQx49IA-hVjhelKQ
+ *      工厂模式的应用
  *      https://mp.weixin.qq.com/s/ReluZMc73D6-VReFX7CgDQ
  *
  *      反射机制
@@ -92,7 +92,7 @@ import java.lang.reflect.Proxy;
         特别注意：访问权限问题
             背景
                反射机制的默认行为受限于Java的访问控制
-               如，无法访问（ private ）私有的方法、字段
+               如，无法访问（ private ）私有的方法、字段             
             冲突
                Java安全机制只允许查看任意对象有哪些域，而不允许读它们的值
                若强制读取，将抛出异常
@@ -108,6 +108,24 @@ import java.lang.reflect.Proxy;
 
               static void setAccessible(AccessibleObject[] array, boolean flag)
               // 设置对象数组可访问标志
+
+
+      数据结构学习：
+          https://mp.weixin.qq.com/s/r9erOzjVNg8WJ6zTfvMzRw
+
+       思考： Retrofit 使用了 Builder , 抽象工厂Factory, 动态代理 实现了网络请求
+              那么为什么要是用动态代理呢？
+
+              框架本身为了与 网络请求业务 做 解耦 用了 动态代理 的方式，
+              为 业务通讯接口 生成代理对象，当代理对象调用业务接口方法 api 的时候，
+              动态代理类 就能监测到并回调，
+               这时候就可以做网络框架该有的功能：解析通讯业务接口，
+              生成网络请求体便于供应给底层OkHttp 做具体的网络请求工作。
+              其实就是框架本身没有办法直接使用业务接口，
+              所以请了一个代理中介对象去间接的访问业务接口，来完成相关的业务功能。
+
+
+
 
  *
  */
@@ -193,9 +211,8 @@ public class DesignModeActivity extends AppCompatActivity {
      * 利用反射调用类的构造函数
      */
     private void initReflectionDemoTwo() {
-           /**利用反射调用构造函数*/
-                // 1. 获取Student类的Class对象
-                Class studentClass  = com.example.dell.rxjavademo.designmode.reflection.Student.class;
+        // 1. 获取Student类的Class对象
+        Class studentClass  = com.example.dell.rxjavademo.designmode.reflection.Student.class;
 
         // 2.1 通过Class对象获取Constructor类对象，从而调用无参构造方法
         // 注：构造函数的调用实际上是在newInstance()，而不是在getConstructor()中调用
@@ -485,56 +502,58 @@ public class DesignModeActivity extends AppCompatActivity {
 
     }
 
+
     /**
      * 工厂模式
-     * 对于调用者来说很简单，只要关心当前用的是什么平台的帐号系统，而不需要关心具体的实现方式。
-     * 也把不同平台(自己，第三方（微信,微博,QQ等等）)的登录、注册、获取用户信息等分离开来。
-     * 以下描述需要实践 
-     * 当然往往不同的平台可能退出当前帐号的方式是一样，
-     * 这个时候，其实可以把 BaseUserLogin 当做代理对象，
-     *             目标接口就是 IBaseUser，
-     *            目标对象 另外新建一个类实现目标接口，
-     *            利用代理模式。
-     *
-     *  思考： 多种支付方式的切换、
-     *         多种地图 SDK 的切换、
-     *         多种网络框架的切换、
-     *         多种持久化数据存储方式的切换、
-     *         多种数据处理方式的切换、
-     *         多种图片加载器的切换等等。
-     *
      */
-    // FIXME: 2018/9/18  先有思路，在实践
     private void initFactory() {
-        UserInfoFactory userInfoFactory = AppAountLoginerFactory.create(this);
-        User user   = new User();
-        user.setName("xiaoQiao");
-        user.setPass("123456");
-
-        userInfoFactory.getLoginUser().login(user);
-       // userInfoFactory.getFindUser().findPass(user);
-       // userInfoFactory.getRegisterUser().register(user);
-       // userInfoFactory.getUserInfoUser().getLoginInfo(user);
+      findViewById(R.id.text_init_factory).setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              startActivity(new Intent(DesignModeActivity.this,UserLoginFactoryActivity.class));
+          }
+      });
 
     }
 
     /**
      * 动态代理代理模式
+     *
+     * 设计模式：这是一份全面 & 清晰的动态代理模式（Proxy Pattern）学习指南
+     * https://blog.csdn.net/carson_ho/article/details/80589878
+     * 
      */
     private void initData() {
         /**Proxy 代理模式*/
         /**下面是典型的静态代理模式，此时Jessen 还想做别的事情，代理PateryProxy 也要做，
-         * 这样不利于代码的开发和维护也就出现动态代理*/
+         * 这样 不利于 代码的开发和维护 也就出现动态代理*/
         
         /**创建Jessen*/
         FindGrilInterface findGrilInterface = new Jessen();
         /**把Jessen 交给 PateryProxy */
         PateryProxy pateryProxy = new PateryProxy(findGrilInterface);
         /**PateryProxy帮Jessen去找对象*/
-        pateryProxy.findGril("xiaoQue",23);
+        pateryProxy.findGril("(静态)普通代理：xiaoQue",23);
+
+        /**经过上面的静态代理发现 不利于团队维护，
+         *  当我还想做其他的事情，代理对象都必须实现相应的方法，我也是，代码改动比较大，
+         *  所以动态代理就出现了*/
 
         
-        /**动态代理*/
+        /**动态代理
+         *     原理：
+         *     不需要显式实现与目标对象类（RealSubject）相同的接口，而是将这种实现推迟到程序运行时由 JVM来实现
+         *      1.即：在使用时再创建动态代理类 & 实例
+                2.静态代理 则是在 代理类实现时 就指定与 目标对象类（RealSubject） 相同的 接口
+                3.通过Java 反射机制的method.invoke（），
+                          通过调用 动态代理类 对象方法，从而 自动调用目标对象 的方法
+
+                动态代理的局限性 ： 目标对象 必须 实现目标接口
+                                    因为 Java 的单继承特性（每个 代理类 都继承了 Proxy 类），
+                                    即只能针对 接口 创建 代理类，不能针对 类 创建 代理类
+         *                          即只能 动态代理 实现了 接口的 类
+         *
+         * */
         /**创建Jessen*/
         final FindGrilInterface findGrilInterfaceTwo = new Jessen();
         /**创建代理对象 PateryProxy */
@@ -561,9 +580,10 @@ public class DesignModeActivity extends AppCompatActivity {
                         return returnValue;
                     }
                 });
+       // 每当 代理对象 调用目标接口里的方法时，动态代理对象 就会回调InvocationHandler接口的invoke实现方法
         /**pateryProxyTwo帮Jessen去找对象*/
-        pateryProxyTwo.findGril("xLi",28);
-        pateryProxyTwo.buyPhone("pateryProxyTwo","iphone8");
+        pateryProxyTwo.findGril("动态代理：xLi",28);
+        pateryProxyTwo.buyPhone("动态代理：xLi","iphone8");
 
     }
 
@@ -577,16 +597,14 @@ public class DesignModeActivity extends AppCompatActivity {
 
 
 
- /*       I/System.out: class java.lang.Boolean
-        I/System.out: class java.lang.Boolean
-        I/System.out: class java.lang.Boolean
-        I/System.out: boolean
-        E/DesignModeActivity: 创建了一个Student实例
-        E/DesignModeActivity: name::::::Carson_Ho
-        E/DesignModeActivity: 创建了一个Student实例
-        E/DesignModeActivity: 调用了有参构造函数
-        E/DesignModeActivity: 创建了一个Student实例
-        E/DesignModeActivity: 调用了无参方法：setName1（）
-        I/System.out: Carson_Ho
-        E/DesignModeActivity: 调用了有参方法setName2（String str）:Carson_Ho
-        I/ViewRootImpl: CPU Rendering VSync enable = true*/
+ /*  /System.out: class java.lang.Boolean
+     I/System.out: class java.lang.Boolean
+     I/System.out: class java.lang.Boolean
+     I/System.out: boolean
+E/DesignModeActivity: 创建了一个Student实例
+E/DesignModeActivity: name::::::Carson_Ho
+E/DesignModeActivity: 创建了一个Student实例
+E/DesignModeActivity: 调用了有参构造函数
+E/DesignModeActivity: 创建了一个Student实例
+E/DesignModeActivity: 调用了无参方法：setName1（）
+E/DesignModeActivity: 调用了有参方法setName2（String str）:Carson_Ho*/
