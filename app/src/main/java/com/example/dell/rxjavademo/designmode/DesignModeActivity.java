@@ -568,6 +568,10 @@ public class DesignModeActivity extends AppCompatActivity {
                 findGrilInterfaceTwo.getClass().getClassLoader(),
                 findGrilInterfaceTwo.getClass().getInterfaces(),
                 new InvocationHandler() {
+                    // 参数说明：
+                    // 参数1：动态代理对象（即哪个动态代理对象调用了method（）
+                    // 参数2：目标对象被调用的方法
+                    // 参数3：指定被调用方法的参数
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                         long currentTime = System.currentTimeMillis();
@@ -580,7 +584,8 @@ public class DesignModeActivity extends AppCompatActivity {
                         return returnValue;
                     }
                 });
-       // 每当 代理对象 调用目标接口里的方法时，动态代理对象 就会回调InvocationHandler接口的invoke实现方法
+        // 每当 代理对象 调用目标接口里的方法时，动态代理对象 就会回调InvocationHandler接口的invoke实现方法
+        // （ 实际上是调用了invoke（），再通过invoke（）里的反射机制调用目标对象的方法）
         /**pateryProxyTwo帮Jessen去找对象*/
         pateryProxyTwo.findGril("动态代理：xLi",28);
         pateryProxyTwo.buyPhone("动态代理：xLi","iphone8");
