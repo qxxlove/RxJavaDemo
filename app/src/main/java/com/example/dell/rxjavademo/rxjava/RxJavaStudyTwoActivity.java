@@ -46,9 +46,7 @@ import io.reactivex.schedulers.Schedulers;
  * update: 2018/1/22
  * version:
  * 参考：这是一个RaJava系列
- *      https://www.jianshu.com/p/ceb48ed8719d
- *
- *
+ * https://www.jianshu.com/p/ceb48ed8719d
  */
 
 public class RxJavaStudyTwoActivity extends AppCompatActivity {
@@ -68,7 +66,7 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rx_java_study_two);
         initView();
 
-        
+
         /**创建操作符的使用*/
         //①最基本的使用，不考虑任何封装，，实用等
         initRaJava();
@@ -82,16 +80,16 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         // ⑤ 延时创建 又分为：
         // 一：定时创建（在x 秒之后），在一个固定的时间点
         // 二： 周期性创建，每隔x秒，开始创建
-           // initDaterRxJava();  // 动态创建
-          //  initTimerRxJava();  // 延时创建
-           // initIntervalRaJava(); // 周期创建
+        // initDaterRxJava();  // 动态创建
+        //  initTimerRxJava();  // 延时创建
+        // initIntervalRaJava(); // 周期创建
         //     initIntervalRangeRaJava(); // 限制条件更多，创建
         //    initRangeRaJava();    // 等同于IntervalRange ,区别在于没有延迟设置
         //    initRangeLongRaJava();   // 等同于 Range ,就是支持数据类型不同Long
 
         initClick();
 
-       
+
         /**转换操作符的使用*/
         // ①  最简单的Map 转换操作符
         //  initMapRaJava();
@@ -103,7 +101,6 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         //  initBufferRaJava();
 
 
-      
         /**组合操作符的使用*/
         // ①  concat(1<= 组合被观察者的个数（<= 4）) / concatArray  (组合被观察者的个数（> 4）)
         //initConcatRxJava();
@@ -133,14 +130,14 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         // ⑩ count     统计被观察者发布事件的个数
         //initCountRxJava();
 
-       
+
         /**功能性操作符*/
         // ①  subscribe                        功能操作符之   订阅即连接观察者和被观察者
         //initSubscribe();
         // ②  subscribeOn() 和 observeOn ()    功能操作符之 线程切换操作符
         // 通过 上述 subscribe 的例子，我们知道观察者和被观察者的发生都是在主线程中完成的，但是我们实际开发中，要比这复杂的很多
         // 我们也必须要遵从的原则"在主线程中更新UI,在子线程中执行耗时操作，所以就出现了subscribeOn 和 observeOn 操作符"
-       // initSubscribeOnAndOberveOn();
+        // initSubscribeOnAndOberveOn();
         // ③ delay()                         功能操作符之 延迟操作符
         //initDelay();
         // ④ do 操作符                       功能操作符之 把控发送某个事件的生命周期
@@ -158,7 +155,7 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         //initRepeat();
         //initRepeatWhen();
 
-        
+
         /**过滤性操作符*/
         // 指定条件的过滤事件
         //①  filter
@@ -192,48 +189,46 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         // ③ elementAtError       在elementAt的基础上，索引越界即报异常
         //initElementAtErrorRaJava();
 
-       
+
         /**条件/布尔操作符*/
-         // ① all    判断发送的数据是否都满足条件
-         // initAllRxjava();
+        // ① all    判断发送的数据是否都满足条件
+        // initAllRxjava();
         //② takeWhile  判断发送的数据是否都满足条件（同上区别： 满足才发送，不满足则不发送）
         //  initTakeWithRxjava();
-         // ③ skipWhile  判断发送的数据是否都满足条件（同上区别： 发送的是不满足的数据）
+        // ③ skipWhile  判断发送的数据是否都满足条件（同上区别： 发送的是不满足的数据）
         //  initSkipWhileRxjava();
-          // ④ takeUntil  执行到满足当前条件，则停止发送数据
-          initTakeUntilRxJava();
-           // 该判断条件也可以是Observable
-         // initTakeUntilTwoRxJava();
-          // ⑤ skipUntil  执行到满足当前条件，则发送之后的数据
+        // ④ takeUntil  执行到满足当前条件，则停止发送数据
+        initTakeUntilRxJava();
+        // 该判断条件也可以是Observable
+        // initTakeUntilTwoRxJava();
+        // ⑤ skipUntil  执行到满足当前条件，则发送之后的数据
         //   initSkipUntilRxJava();
-          // ⑥ sequenceEqual   比较两个Observable 发送的数据是否相等
-          // initSequenceEqualRxJava();
-          // ⑦ contains     发送的数据是否包含某个具体的值
-         //  initContainsRxJava();
-          // ⑧ isEmpty     发送的数据是否为空
+        // ⑥ sequenceEqual   比较两个Observable 发送的数据是否相等
+        // initSequenceEqualRxJava();
+        // ⑦ contains     发送的数据是否包含某个具体的值
+        //  initContainsRxJava();
+        // ⑧ isEmpty     发送的数据是否为空
         //   initIsEmpty();
-          // ⑨ amb       当需要发送多个Observable ，只发送先发送数据的Observable，其余的责备抛弃
+        // ⑨ amb       当需要发送多个Observable ，只发送先发送数据的Observable，其余的责备抛弃
         //   initAmbRxJava();
-          // ⑩ defaultIfEmpty   在不发送任何有效事件下，仅发送onComplete事件，可以发送一个默认值
-         //  initDefaultEmptyRxJava();
+        // ⑩ defaultIfEmpty   在不发送任何有效事件下，仅发送onComplete事件，可以发送一个默认值
+        //  initDefaultEmptyRxJava();
 
 
-        
         /**背压策略  被观察者发送事件过快，观察者处理不过来。*/
-           // initFlowable();
-           // initFlowableLimit();
-           // initFlowableLimitAsync();
-            // RaJava2.0 内部也帮我们实现了背压的方法：
-            //  .onBackpressureBuffer() // 添加背压策略封装好的方法，此处选择Buffer模式，即缓存区大小无限制
-            //  .onBackpressureDrop()   onBackpressureLatest()      // 自行了解
+        // initFlowable();
+        // initFlowableLimit();
+        // initFlowableLimitAsync();
+        // RaJava2.0 内部也帮我们实现了背压的方法：
+        //  .onBackpressureBuffer() // 添加背压策略封装好的方法，此处选择Buffer模式，即缓存区大小无限制
+        //  .onBackpressureDrop()   onBackpressureLatest()      // 自行了解
     }
 
     /**
      * 背压处理： 异步处理
-     *    在异步中：
-     *     反向控制的原理是：通过RxJava内部固定调用被观察者线程中的request(n)  从而
-     *                      反向控制被观察者的发送事件速度
-     *
+     * 在异步中：
+     * 反向控制的原理是：通过RxJava内部固定调用被观察者线程中的request(n)  从而
+     * 反向控制被观察者的发送事件速度
      */
     private void initFlowableLimitAsync() {
         // 被观察者：一共需要发送500个事件，但真正开始发送事件的前提 = FlowableEmitter.requested()返回值 ≠ 0
@@ -247,11 +242,12 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
                 // 被观察者一共需要发送500个事件
                 for (int i = 0; i < 500; i++) {
                     flag = false;
-                   // 若requested() == 0则不发送
+                    // 若requested() == 0则不发送
                     while (emitter.requested() == 0) {
                         if (!flag) {
                             Log.d(TAG, "不再发送");
-                            flag = true; }
+                            flag = true;
+                        }
                     }
                     // requested() ≠ 0 才发送
                     Log.d(TAG, "发送了事件" + i + "，观察者可接收事件数量 = " + emitter.requested());
@@ -269,7 +265,6 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
                         // 相同点：Subscription参数具备Disposable参数的作用，即Disposable.dispose()切断连接,
                         // 同样的调用Subscription.cancel()切断连接
                         // 不同点：Subscription增加了void request(long n)
-
 
 
                         Log.d(TAG, "onSubscribe");
@@ -296,20 +291,18 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
 
 
     }
+
     /**
-     *  背压处理： 根据  观察者响应式拉取  控制   被观察者的发布事件速度
-     *  在同步中 requested  具有叠加性 ，因为没有缓存区。
-     *             s.request(10); // 第1次设置观察者每次能接受10个事件
-                   s.request(20); // 第2次设置观察者每次能接受20个事件
-                           实时更新性  emitter.requested()的值
-                           异常：
-                          ①当FlowableEmitter.requested()减到0时，则代表观察者已经不可接收事件
-                          此时被观察者若继续发送事件，则会抛出MissingBackpressureException异常
-                          ② 如观察者可接收事件数量 = 1，当被观察者发送第2个事件时，就会抛出异常
-                              （意思就是我只接收一个，你却给我发两个甚至更多）
-
-                   
-
+     * 背压处理： 根据  观察者响应式拉取  控制   被观察者的发布事件速度
+     * 在同步中 requested  具有叠加性 ，因为没有缓存区。
+     * s.request(10); // 第1次设置观察者每次能接受10个事件
+     * s.request(20); // 第2次设置观察者每次能接受20个事件
+     * 实时更新性  emitter.requested()的值
+     * 异常：
+     * ①当FlowableEmitter.requested()减到0时，则代表观察者已经不可接收事件
+     * 此时被观察者若继续发送事件，则会抛出MissingBackpressureException异常
+     * ② 如观察者可接收事件数量 = 1，当被观察者发送第2个事件时，就会抛出异常
+     * （意思就是我只接收一个，你却给我发两个甚至更多）
      */
     private void initFlowableLimit() {
         Flowable.create(new FlowableOnSubscribe<String>() {
@@ -318,13 +311,12 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
                 // 调用emitter.requested()获取当前观察者需要接收的事件数量
                 long n = emitter.requested();
                 Log.d(TAG, "观察者可接收事件" + n);
-                
+
                 // 根据emitter.requested()的值，即当前观察者需要接收的事件数量来发送事件
                 for (int i = 0; i < n; i++) {
                     Log.d(TAG, "发送了事件" + i);
                     emitter.onNext(String.valueOf(i));
                 }
-
 
 
             }
@@ -337,7 +329,6 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
                         // 相同点：Subscription参数具备Disposable参数的作用，即Disposable.dispose()切断连接,
                         // 同样的调用Subscription.cancel()切断连接
                         // 不同点：Subscription增加了void request(long n)
-
 
 
                         Log.d(TAG, "onSubscribe");
@@ -374,9 +365,12 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
             @Override
             public void subscribe(FlowableEmitter<String> emitter) throws Exception {
                 Log.d(TAG, "发送事件 1");
-                emitter.onNext("1"); Log.d(TAG, "发送事件 2");
-                emitter.onNext("2"); Log.d(TAG, "发送事件 3");
-                emitter.onNext("3"); Log.d(TAG, "发送完成");
+                emitter.onNext("1");
+                Log.d(TAG, "发送事件 2");
+                emitter.onNext("2");
+                Log.d(TAG, "发送事件 3");
+                emitter.onNext("3");
+                Log.d(TAG, "发送完成");
                 emitter.onComplete();
             }
         }, BackpressureStrategy.ERROR)
@@ -384,37 +378,36 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread()) // 设置观察者在主线程中进行
                 // 步骤2：创建观察者 =  Subscriber & 建立订阅关系
                 .subscribe(new Subscriber<String>() {
-            @Override
-            public void onSubscribe(Subscription s) {
-                // 对比Observer传入的Disposable参数，Subscriber此处传入的参数 = Subscription
-                // 相同点：Subscription参数具备Disposable参数的作用，即Disposable.dispose()切断连接,
-                // 同样的调用Subscription.cancel()切断连接
-                // 不同点：Subscription增加了void request(long n)
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        // 对比Observer传入的Disposable参数，Subscriber此处传入的参数 = Subscription
+                        // 相同点：Subscription参数具备Disposable参数的作用，即Disposable.dispose()切断连接,
+                        // 同样的调用Subscription.cancel()切断连接
+                        // 不同点：Subscription增加了void request(long n)
 
 
+                        Log.d(TAG, "onSubscribe");
+                        s.request(3);
+                        // 作用：决定观察者能够接收多少个事件
+                        // 如设置了s.request(3)，这就说明观察者能够接收3个事件（多出的事件存放在缓存区）
+                        // 官方默认推荐使用Long.MAX_VALUE，即s.request(Long.MAX_VALUE);
+                    }
 
-                Log.d(TAG, "onSubscribe");
-                s.request(3);
-                // 作用：决定观察者能够接收多少个事件
-                // 如设置了s.request(3)，这就说明观察者能够接收3个事件（多出的事件存放在缓存区）
-                // 官方默认推荐使用Long.MAX_VALUE，即s.request(Long.MAX_VALUE);
-            }
+                    @Override
+                    public void onNext(String s) {
+                        Log.d(TAG, "接收到了事件" + s);
+                    }
 
-            @Override
-            public void onNext(String s) {
-                Log.d(TAG, "接收到了事件" + s);
-            }
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.d(TAG, "onError" + t);
+                    }
 
-            @Override
-            public void onError(Throwable t) {
-                Log.d(TAG, "onError" + t);
-            }
-
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "onComplete");
-            }
-        });
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete");
+                    }
+                });
 
     }
 
@@ -422,41 +415,41 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
      * 场景：在不发送任何有效事件下，仅发送onComplete事件，可以发送一个默认值
      */
     private void initDefaultEmptyRxJava() {
-       Observable.create(new ObservableOnSubscribe<Integer>() {
-           @Override
-           public void subscribe(ObservableEmitter<Integer> e) throws Exception {
-               //不发送任何有效事件
-               e.onNext(null);
-               e.onNext(null);
-               e.onNext(null);
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> e) throws Exception {
+                //不发送任何有效事件
+                e.onNext(null);
+                e.onNext(null);
+                e.onNext(null);
 
-               // 只发送Complete事件
-               e.onComplete();
+                // 只发送Complete事件
+                e.onComplete();
 
-           }
-           // 发送一个默认值
-       }).defaultIfEmpty(10)
-               .subscribe(new Observer<Integer>() {
-           @Override
-           public void onSubscribe(Disposable d) {
+            }
+            // 发送一个默认值
+        }).defaultIfEmpty(10)
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-           }
+                    }
 
-           @Override
-           public void onNext(Integer value) {
-               Log.d(TAG, "接收到了事件"+ value  );
-           }
+                    @Override
+                    public void onNext(Integer value) {
+                        Log.d(TAG, "接收到了事件" + value);
+                    }
 
-           @Override
-           public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-           }
+                    }
 
-           @Override
-           public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-           }
-       });
+                    }
+                });
 
 
         // 结果是：   10
@@ -465,15 +458,14 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
 
     /**
      * 场景：   当需要发送多个Observable ，只发送先发送数据的Observable，其余的责备抛弃
-     *
      */
     private void initAmbRxJava() {
         // 设置2个需要发送的Observable & 放入到集合中
-       List<Observable<Integer>> list = new ArrayList<>();
+        List<Observable<Integer>> list = new ArrayList<>();
         // 第1个Observable延迟1秒发射数据
-        list.add(Observable.just(1,2,3).delay(1,TimeUnit.SECONDS));
+        list.add(Observable.just(1, 2, 3).delay(1, TimeUnit.SECONDS));
         // 第2个Observable正常发送数据
-        list.add(Observable.just(4,5,6));
+        list.add(Observable.just(4, 5, 6));
 
         // 一共需要发送2个Observable的数据
         // 但由于使用了amba（）,所以仅发送先发送数据的Observable
@@ -481,7 +473,7 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
         Observable.amb(list).subscribe(new Consumer<Integer>() {
             @Override
             public void accept(Integer integer) throws Exception {
-                Log.e(TAG, "接收到了事件 "+integer);
+                Log.e(TAG, "接收到了事件 " + integer);
             }
         });
 
@@ -494,14 +486,14 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
      * 场景： 判断发送的数据是否为空
      */
     private void initIsEmpty() {
-         Observable.just(1,3,4,5,3).isEmpty().subscribe(new Consumer<Boolean>() {
-             @Override
-             public void accept(Boolean aBoolean) throws Exception {
-                 Log.d(TAG,"结果是"+aBoolean);
-             }
-         });
-         // 输出的结果： false
-         // 若为空，返回 true；否则，返回 false
+        Observable.just(1, 3, 4, 5, 3).isEmpty().subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Exception {
+                Log.d(TAG, "结果是" + aBoolean);
+            }
+        });
+        // 输出的结果： false
+        // 若为空，返回 true；否则，返回 false
     }
 
 
@@ -509,14 +501,14 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
      * 场景：发送的数据是否包含某个具体的值
      */
     private void initContainsRxJava() {
-       Observable.just(1,2,4,5,30)
-               .contains(2)
-               .subscribe(new Consumer<Boolean>() {
-           @Override
-           public void accept(Boolean aBoolean) throws Exception {
-               Log.d(TAG,"结果是"+aBoolean);
-           }
-       });
+        Observable.just(1, 2, 4, 5, 30)
+                .contains(2)
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        Log.d(TAG, "结果是" + aBoolean);
+                    }
+                });
 
     }
 
@@ -524,13 +516,13 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
      * 场景：比较两个Observable 发送的数据是否相等
      */
     private void initSequenceEqualRxJava() {
-         Observable.sequenceEqual(Observable.just(1,3,4),Observable.just(1,3,4))
-                 .subscribe(new Consumer<Boolean>() {
-             @Override
-             public void accept(Boolean aBoolean) throws Exception {
-                 Log.d(TAG,"两个是否相同"+aBoolean);
-             }
-         });
+        Observable.sequenceEqual(Observable.just(1, 3, 4), Observable.just(1, 3, 4))
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        Log.d(TAG, "两个是否相同" + aBoolean);
+                    }
+                });
 
     }
 
@@ -541,30 +533,30 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
      */
     private void initSkipUntilRxJava() {
         // （原始）第1个Observable：每隔1s发送1个数据 = 从0开始，每次递增1
-         Observable.interval(1,TimeUnit.SECONDS)
-                 // 第2个Observable：延迟5s后开始发送1个Long型数据
-                 .skipUntil(Observable.timer(5,TimeUnit.SECONDS))
-                 .subscribe(new Observer<Long>() {
-             @Override
-             public void onSubscribe(Disposable d) {
-                 Log.d(TAG, "开始采用subscribe连接");
-             }
+        Observable.interval(1, TimeUnit.SECONDS)
+                // 第2个Observable：延迟5s后开始发送1个Long型数据
+                .skipUntil(Observable.timer(5, TimeUnit.SECONDS))
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.d(TAG, "开始采用subscribe连接");
+                    }
 
-             @Override
-             public void onNext(Long value) {
-                 Log.d(TAG, "接收到了事件"+ value  );
-             }
+                    @Override
+                    public void onNext(Long value) {
+                        Log.d(TAG, "接收到了事件" + value);
+                    }
 
-             @Override
-             public void onError(Throwable e) {
-                 Log.d(TAG, "对Error事件作出响应");
-             }
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "对Error事件作出响应");
+                    }
 
-             @Override
-             public void onComplete() {
-                 Log.d(TAG, "对Complete事件作出响应");
-             }
-         });
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "对Complete事件作出响应");
+                    }
+                });
 
         //5s后（ skipUntil（） 传入的Observable开始发送数据），（原始）第1个Observable的数据才开始发送
         // 输出结果：  开始采用subscribe连接
@@ -583,30 +575,30 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
      */
     private void initTakeUntilTwoRxJava() {
         // （原始）第1个Observable：每隔1s发送1个数据 = 从0开始，每次递增1
-        Observable.interval(1,TimeUnit.SECONDS)
+        Observable.interval(1, TimeUnit.SECONDS)
                 // 第2个Observable：延迟5s后开始发送1个Long型数据
-                .takeUntil(Observable.timer(5,TimeUnit.SECONDS))
+                .takeUntil(Observable.timer(5, TimeUnit.SECONDS))
                 .subscribe(new Observer<Long>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                Log.d(TAG, "开始采用subscribe连接");
-            }
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.d(TAG, "开始采用subscribe连接");
+                    }
 
-            @Override
-            public void onNext(Long value) {
-                Log.d(TAG, "接收到了事件"+ value  );
-            }
+                    @Override
+                    public void onNext(Long value) {
+                        Log.d(TAG, "接收到了事件" + value);
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "对Error事件作出响应");
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "对Error事件作出响应");
+                    }
 
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "对Complete事件作出响应");
-            }
-        });
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "对Complete事件作出响应");
+                    }
+                });
 
         // 输出结果： 当第 5s 时，第2个 Observable 开始发送数据，于是（原始）第1个 Observable 停止发送数据
         // 开始采用subscribe连接
@@ -619,26 +611,27 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
 
     }
 
-    private  boolean   isOk ;
+    private boolean isOk;
+
     /**
      * 场景： 执行到满足条件事，就停止发送数据
      * takeUntil  条件操作符
      */
     private void initTakeUntilRxJava() {
-         Observable.interval(1,TimeUnit.SECONDS).takeUntil(new Predicate<Long>() {
-             @Override
-             public boolean test(Long aLong) throws Exception {
-                 return isOk == true;
-                 // 返回true时，就停止发送事件
-                 // 当发送的数据满足>3时，就停止发送Observable的数据
-             }
-         }).subscribe(new Consumer<Long>() {
-             @Override
-             public void accept(Long aLong) throws Exception {
-                 Log.d(TAG,"发送了事件 "+ aLong);
-             }
-         });
-         // 输出结果： 0.1.2.3.4 （4 > 3 则停止发送数据）
+        Observable.interval(1, TimeUnit.SECONDS).takeUntil(new Predicate<Long>() {
+            @Override
+            public boolean test(Long aLong) throws Exception {
+                return isOk == true;
+                // 返回true时，就停止发送事件
+                // 当发送的数据满足>3时，就停止发送Observable的数据
+            }
+        }).subscribe(new Consumer<Long>() {
+            @Override
+            public void accept(Long aLong) throws Exception {
+                Log.d(TAG, "发送了事件 " + aLong);
+            }
+        });
+        // 输出结果： 0.1.2.3.4 （4 > 3 则停止发送数据）
     }
 
     /**
@@ -646,18 +639,18 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
      * skipWhile 条件操作符  (发送不满足数据)
      */
     private void initSkipWhileRxjava() {
-       Observable.interval(1,TimeUnit.SECONDS).skipWhile(new Predicate<Long>() {
-           @Override
-           public boolean test(Long aLong) throws Exception {
-               // 直到判断条件不成立 = false = 发射的数据≥5，才开始发送数据
-               return aLong<5;
-           }
-       }).subscribe(new Consumer<Long>() {
-           @Override
-           public void accept(Long aLong) throws Exception {
-               Log.d(TAG,"发送了事件 "+ aLong);
-           }
-       });
+        Observable.interval(1, TimeUnit.SECONDS).skipWhile(new Predicate<Long>() {
+            @Override
+            public boolean test(Long aLong) throws Exception {
+                // 直到判断条件不成立 = false = 发射的数据≥5，才开始发送数据
+                return aLong < 5;
+            }
+        }).subscribe(new Consumer<Long>() {
+            @Override
+            public void accept(Long aLong) throws Exception {
+                Log.d(TAG, "发送了事件 " + aLong);
+            }
+        });
         // 输出结果: 5,6,7,8,9,10......(依次往后)
     }
 
@@ -667,21 +660,21 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
      */
     private void initTakeWithRxjava() {
         // 1. 每1s发送1个数据 = 从0开始，递增1，即0、1、2、3
-        Observable.interval(1,TimeUnit.SECONDS)
+        Observable.interval(1, TimeUnit.SECONDS)
                 // 2. 通过takeWhile传入一个判断条件
                 .takeWhile(new Predicate<Long>() {
-            @Override
-            public boolean test(Long aLong) throws Exception {
-                // 当发送的数据满足<3时，才发送Observable的数据
-                return aLong < 3;
-            }
-        }).subscribe(new Consumer<Long>() {
+                    @Override
+                    public boolean test(Long aLong) throws Exception {
+                        // 当发送的数据满足<3时，才发送Observable的数据
+                        return aLong < 3;
+                    }
+                }).subscribe(new Consumer<Long>() {
             @Override
             public void accept(Long aLong) throws Exception {
-                Log.d(TAG,"发送了事件 "+ aLong);
+                Log.d(TAG, "发送了事件 " + aLong);
             }
         });
-       // 最后的结果：0,1，2
+        // 最后的结果：0,1，2
     }
 
     /**
@@ -689,19 +682,19 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
      * all  条件操作符
      */
     private void initAllRxjava() {
-        Observable.just(1,2,3,4,5,8)
+        Observable.just(1, 2, 3, 4, 5, 8)
                 .all(new Predicate<Integer>() {
-            @Override
-            public boolean test(Integer integer) throws Exception {
-                return integer <= 10;
-            }
-        }).subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public boolean test(Integer integer) throws Exception {
+                        return integer <= 10;
+                    }
+                }).subscribe(new Consumer<Boolean>() {
             @Override
             public void accept(Boolean aBoolean) throws Exception {
-                 Log.d(TAG,"输出结果："+aBoolean);
+                Log.d(TAG, "输出结果：" + aBoolean);
             }
         });
-       // 最后的结果肯定是true
+        // 最后的结果肯定是true
     }
 
     /**
@@ -2891,27 +2884,27 @@ public class RxJavaStudyTwoActivity extends AppCompatActivity {
             // 通过订阅（subscribe）来实现被观察者和观察者之间的联系
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Integer>() {
-            // 创建观察者 并 做一些事情
-            @Override
-            public void onSubscribe(Disposable d) {
-                // 默认先调用此方法
-            }
+                    // 创建观察者 并 做一些事情
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        // 默认先调用此方法
+                    }
 
-            @Override
-            public void onNext(Integer value) {
+                    @Override
+                    public void onNext(Integer value) {
 
-            }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
+                    }
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
-        });
+                    }
+                });
 
     }
 
